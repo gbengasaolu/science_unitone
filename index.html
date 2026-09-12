@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Soil & Earth Mastery Academy</title>
+<style>
+  :root{
+    --bg1:#0f2b3d; --bg2:#134a5c; --accent:#ffb84d; --accent2:#4dd0e1;
+    --green:#4caf50; --red:#e57373; --card:#ffffff; --text:#1b2a33;
+    --purple:#8e6fd1; --gold:#f5c542;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Segoe UI',Verdana,Arial,sans-serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2) 60%,#0a1d29);
+    color:var(--text); min-height:100vh;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+  #app{max-width:960px;margin:0 auto;padding:12px 12px 60px;}
+  .topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    color:#fff;padding:10px 4px;flex-wrap:wrap;gap:8px;
+  }
+  .topbar .title{font-size:1.3rem;font-weight:800;letter-spacing:0.5px;}
+  .topbar .title span{color:var(--accent);}
+  .pill{
+    background:rgba(255,255,255,0.15);border-radius:20px;padding:6px 14px;
+    font-size:0.85rem;font-weight:600;color:#fff;
+  }
+  .card{
+    background:var(--card);border-radius:16px;padding:18px;margin:14px 0;
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
+  }
+  h1,h2,h3{margin-top:0;}
+  .btn{
+    display:inline-block;background:var(--accent);color:#402b00;border:none;
+    padding:12px 20px;border-radius:12px;font-weight:700;font-size:1rem;
+    cursor:pointer;margin:6px 6px 6px 0;transition:transform 0.15s, box-shadow 0.15s;
+    min-height:44px;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+  .btn:focus-visible{outline:3px solid #fff;outline-offset:2px;}
+  .btn.secondary{background:var(--accent2);color:#013;}
+  .btn.green{background:var(--green);color:#fff;}
+  .btn.purple{background:var(--purple);color:#fff;}
+  .btn.ghost{background:#eee;color:#333;}
+  .btn.small{padding:8px 14px;font-size:0.85rem;min-height:36px;}
+  .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;}
+  .set-card{
+    border-radius:14px;padding:16px;color:#fff;cursor:pointer;border:none;text-align:left;
+    transition:transform 0.15s;position:relative;overflow:hidden;
+  }
+  .set-card:hover{transform:translateY(-3px);}
+  .set-card h3{margin:0 0 6px;font-size:1.1rem;}
+  .set-card .desc{font-size:0.85rem;opacity:0.95;margin-bottom:8px;}
+  .progressbar-outer{
+    background:rgba(255,255,255,0.35);border-radius:10px;height:10px;overflow:hidden;margin-top:8px;
+  }
+  .progressbar-inner{background:#fff;height:100%;border-radius:10px;transition:width 0.4s;}
+  .topicbar-outer{background:#e0e0e0;border-radius:8px;height:14px;overflow:hidden;}
+  .topicbar-inner{height:100%;border-radius:8px;transition:width 0.4s;}
+  .badge{
+    display:inline-block;background:var(--gold);color:#402b00;border-radius:20px;
+    padding:6px 12px;font-size:0.8rem;font-weight:700;margin:3px;
+  }
+  .qstim{
+    background:#f4f8fa;border-left:5px solid var(--accent2);padding:12px;border-radius:8px;
+    margin-bottom:12px;font-size:0.95rem;line-height:1.5;
+  }
+  table.datatable{border-collapse:collapse;width:100%;margin:10px 0;font-size:0.85rem;}
+  table.datatable th, table.datatable td{border:1px solid #ccc;padding:6px 8px;text-align:center;}
+  table.datatable th{background:var(--bg2);color:#fff;}
+  .option-btn{
+    display:block;width:100%;text-align:left;padding:12px 14px;margin:8px 0;
+    border-radius:10px;border:2px solid #ccd7db;background:#fafcfd;cursor:pointer;
+    font-size:0.98rem;transition:background 0.15s,border-color 0.15s;min-height:44px;
+  }
+  .option-btn:hover{background:#eef7fa;border-color:var(--accent2);}
+  .option-btn.selected{border-color:var(--purple);background:#f1ecfb;}
+  .option-btn.correct{border-color:var(--green);background:#e8f7ea;font-weight:700;}
+  .option-btn.incorrect{border-color:var(--red);background:#fdecec;font-weight:700;}
+  .option-btn:disabled{cursor:default;}
+  .feedback-box{
+    border-radius:10px;padding:14px;margin-top:14px;font-size:0.95rem;line-height:1.5;
+  }
+  .feedback-box.correct{background:#e8f7ea;border:2px solid var(--green);}
+  .feedback-box.incorrect{background:#fdecec;border:2px solid var(--red);}
+  .hint-box{background:#fff8e1;border:2px dashed var(--gold);border-radius:10px;padding:10px;margin-top:10px;font-size:0.9rem;}
+  .qmeta{display:flex;justify-content:space-between;font-size:0.8rem;color:#556;margin-bottom:6px;flex-wrap:wrap;gap:6px;}
+  .conceptTag{background:#dceefb;color:#0a4a6b;padding:2px 8px;border-radius:10px;font-size:0.75rem;font-weight:700;}
+  .nav-row{display:flex;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:8px;}
+  .mastery-ring{
+    width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:1rem;color:#fff;flex-shrink:0;
+  }
+  .concept-card{background:#f7fafc;border-radius:12px;padding:12px;border:1px solid #dde7ea;}
+  .home-nav{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;}
+  .drag-item{
+    padding:10px 14px;margin:6px 0;background:#fff;border:2px solid var(--accent2);
+    border-radius:10px;cursor:grab;font-weight:600;user-select:none;
+  }
+  .drag-item.dragging{opacity:0.4;}
+  .drop-zone{
+    min-height:50px;border:2px dashed #999;border-radius:10px;padding:8px;margin:4px 0;
+    background:#fafafa;
+  }
+  .msel-box{display:flex;align-items:center;gap:8px;padding:10px;border:2px solid #ccd7db;border-radius:10px;margin:6px 0;cursor:pointer;}
+  .msel-box.selected{border-color:var(--purple);background:#f1ecfb;}
+  footer.appfoot{text-align:center;color:#cfe0e6;font-size:0.75rem;margin-top:20px;}
+  .flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .lab-canvas-wrap{background:#eef5f7;border-radius:10px;padding:10px;text-align:center;}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+  a{color:var(--accent2);}
+  .warn-note{font-size:0.75rem;color:#666;font-style:italic;margin-top:10px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   STORAGE HELPERS (localStorage with graceful fallback)
+   ============================================================ */
+let memoryStore = {};
+let hasLS = true;
+try {
+  localStorage.setItem('__test__','1');
+  localStorage.removeItem('__test__');
+} catch(e){ hasLS = false; }
+
+function lsGet(key, fallback){
+  try{
+    if(hasLS){
+      const v = localStorage.getItem(key);
+      return v ? JSON.parse(v) : fallback;
+    } else {
+      return memoryStore[key] !== undefined ? memoryStore[key] : fallback;
+    }
+  }catch(e){ return fallback; }
+}
+function lsSet(key, value){
+  try{
+    if(hasLS){
+      localStorage.setItem(key, JSON.stringify(value));
+    } else {
+      memoryStore[key] = value;
+    }
+  }catch(e){ /* ignore quota errors */ }
+}
+function lsReset(){
+  try{
+    if(hasLS){
+      Object.keys(localStorage).filter(k=>k.startsWith('soilAcademy_')).forEach(k=>localStorage.removeItem(k));
+    }
+    memoryStore = {};
+  }catch(e){}
+}
+
+const STATE_KEY = 'soilAcademy_state_v1';
+
+/* ============================================================
+   CONCEPT LIST
+   ============================================================ */
+const CONCEPTS = [
+  {id:'particleSize', name:'Particle Size & Ordering'},
+  {id:'texture', name:'Texture & Feel'},
+  {id:'color', name:'Soil Color'},
+  {id:'humus', name:'Humus & Topsoil'},
+  {id:'waterRetention', name:'Water Retention'},
+  {id:'drainage', name:'Drainage'},
+  {id:'plantSupport', name:'Supporting Plant Growth'},
+  {id:'soilID', name:'Soil Identification from Evidence'},
+  {id:'weathering', name:'Weathering'},
+  {id:'erosion', name:'Erosion (water, wind, waves)'},
+  {id:'evidenceReasoning', name:'Evidence & Scientific Reasoning'},
+  {id:'investigation', name:'Investigation Skills'}
+];
+
+/* ============================================================
+   MINI LESSONS
+   ============================================================ */
+const MINI_LESSONS = [
+  {
+    concept:'particleSize',
+    title:'Particle Size: Gravel to Clay',
+    explanation:"Soil particles come in different sizes. From largest to smallest: gravel, sand, loam (a mix), silt, then clay (smallest).",
+    rule:"Bigger particles = bigger air spaces between them. Smaller particles = tinier spaces packed closer together.",
+    example:"Sand grains you can see and feel are gritty. Clay particles are so tiny you can't see them, and clay feels smooth or sticky.",
+    mistake:"A common mistake is thinking smaller particles mean less soil — really it means the *pieces* are smaller, packed tighter.",
+    check:"Which has bigger particles: sand or clay?"
+  },
+  {
+    concept:'texture',
+    title:'Texture & Color Clues',
+    explanation:"Texture is how soil feels: gritty (sand), sticky when wet (clay), or a smooth gritty-sticky mix (loam).",
+    rule:"Gritty = sand. Sticky when wet = clay. Rocky = gravel. Gritty+sticky+smooth combo = loam.",
+    example:"If you rub soil and it feels like sugar, it's probably sandy. If it feels like sticky dough when wet, it's probably clay.",
+    mistake:"Looking alone isn't enough — you also need to touch soil to know its texture for sure.",
+    check:"What might red or yellow soil color usually indicate?"
+  },
+  {
+    concept:'humus',
+    title:'Humus & Topsoil',
+    explanation:"Humus is the dark, rich, spongy part of soil made from decayed (broken down) plants and animals.",
+    rule:"More humus = more nutrients for plants. Topsoil (often loam) is rich in humus.",
+    example:"Dark brown or black soil color usually means it has lots of nutrient-rich humus.",
+    mistake:"Don't confuse humus with 'humid' — humus is decayed organic matter, not about moisture directly (though it does help hold water).",
+    check:"Why is dark soil often good for growing plants?"
+  },
+  {
+    concept:'waterRetention',
+    title:'Water Retention Rules',
+    explanation:"Water retention means how much water soil can hold onto.",
+    rule:"Large particles → large air spaces → water drains fast → LOW retention. Small particles (clay) → tiny spaces → water clings → HIGH retention.",
+    example:"Sandy soil dries out fast. Clay soil can stay soggy for a long time.",
+    mistake:"Some students think more texture always means more water — it's really about particle size and spacing.",
+    check:"Which soil would you need to water more often: sandy or clay?"
+  },
+  {
+    concept:'drainage',
+    title:'Drainage: The Opposite of Retention',
+    explanation:"Drainage is how fast water passes through soil.",
+    rule:"Large particles (sand, gravel) = big gaps = fast drainage. Small particles (clay) = tiny gaps = slow drainage.",
+    example:"Gravel drains almost instantly. Clay can stay wet and compact for days.",
+    mistake:"Fast drainage and high water retention can't both be true for the same soil — they trade off against each other.",
+    check:"If a soil drains very fast, is it more likely sandy or clay-based?"
+  },
+  {
+    concept:'plantSupport',
+    title:'Which Soils Support Plants Best?',
+    explanation:"Plants need the right mix of water, air, and nutrients from soil.",
+    rule:"Loam (a mix of sand, silt, clay, plus humus) usually supports plants best because it balances drainage, water retention, and nutrients.",
+    example:"Root vegetables like carrots often grow well in sandy soil since it drains well and doesn't compact around roots.",
+    mistake:"Pure sand or pure clay each have a weakness — sand lacks nutrients/water, clay lacks air/drainage.",
+    check:"Why might a gardener add humus to sandy soil?"
+  },
+  {
+    concept:'soilID',
+    title:'Being a Soil Detective',
+    explanation:"You can identify an unknown soil sample using clues: particle size, color, texture, water retention, and drainage.",
+    rule:"Combine multiple clues — don't rely on just one observation.",
+    example:"Very large gray grains that don't hold water and drain fast → most likely gravel.",
+    mistake:"One clue alone can be misleading; always check if all the clues agree.",
+    check:"If a soil has microscopic particles, holds water, and doesn't drain — what soil type is it?"
+  },
+  {
+    concept:'weathering',
+    title:'Weathering: Breaking Rocks Down',
+    explanation:"Weathering is the gradual breaking down of rocks into smaller pieces over long periods of time.",
+    rule:"Wind, water, and ice slowly wear away at rock surfaces.",
+    example:"A rock sitting in a riverbed slowly gets smaller and smoother as water rubs against it for years.",
+    mistake:"Weathering happens gradually — not instantly, like in a single storm or day.",
+    check:"Does weathering happen quickly or slowly?"
+  },
+  {
+    concept:'erosion',
+    title:'Erosion: Moving the Pieces',
+    explanation:"Erosion is when wind, water, or waves carry away small bits of rock and soil to a new place.",
+    rule:"Moving water (rivers, streams, waves) and wind are the two big causes of erosion discussed in this unit.",
+    example:"A river can carve out a canyon over thousands of years by slowly wearing away rock and carrying it downstream.",
+    mistake:"A canyon is not formed in one day by a flood — it forms gradually, over a very long time.",
+    check:"What formed the Grand Canyon-like landforms in Georgia, like Providence Canyon?"
+  },
+  {
+    concept:'evidenceReasoning',
+    title:'Using Evidence to Explain',
+    explanation:"Good scientists use evidence — not just guesses — to support their conclusions.",
+    rule:"Look for the answer that is BEST supported by the evidence given, not just the first idea that sounds right.",
+    example:"If a picture shows a smooth, rounded rock in a river, evidence supports 'moving water smoothed it' rather than 'wind did it.'",
+    mistake:"Watch out for options that sound dramatic (huge floods, one-day events) — real geological change is usually slow.",
+    check:"Why is 'how do you know' an important question in science?"
+  },
+  {
+    concept:'investigation',
+    title:'Investigating Like a Scientist',
+    explanation:"To investigate soil, scientists use tools (like hand lenses) AND their senses (touch, sight).",
+    rule:"Looking alone is not enough to know texture — you need to touch the soil too.",
+    example:"A hand lens shows you particle size, but you need to rub the soil to feel its texture.",
+    mistake:"Assuming one tool or one sense gives you ALL the information you need.",
+    check:"Why isn't a hand lens alone enough to determine soil texture?"
+  }
+];
+
+/* ============================================================
+   QUESTION BANK
+   Each question: {id, set, concept, difficulty, type, stimulus(optional),
+   table(optional array), prompt, options[], correctIndex or correctIndices[],
+   explanation, distractorNotes(optional obj idx->text)}
+   ============================================================ */
+let qidCounter = 1;
+function nq(){ return 'q' + (qidCounter++); }
+
+const QUESTIONS = [];
+
+/* ---------- SET 1: FOUNDATIONS (25+) ---------- */
+QUESTIONS.push(
+{id:nq(),set:1,concept:'particleSize',difficulty:'easy',type:'mc',
+ prompt:"Which list correctly orders soil particles from LARGEST to smallest?",
+ options:["Clay, silt, loam, sand, gravel","Gravel, sand, loam, silt, clay","Sand, gravel, clay, silt, loam","Silt, clay, sand, loam, gravel"],
+ correctIndex:1,
+ explanation:"From largest to smallest: gravel (huge), sand (large), loam (medium mix), silt (smaller than sand but bigger than clay), and clay (tiny)."},
+{id:nq(),set:1,concept:'texture',difficulty:'easy',type:'mc',
+ prompt:"How does sandy soil usually feel when you rub it between your fingers?",
+ options:["Sticky","Gritty","Smooth and slippery","Rocky and lumpy"],
+ correctIndex:1,
+ explanation:"Sandy soil feels gritty because it is made of larger, rough particles."},
+{id:nq(),set:1,concept:'texture',difficulty:'easy',type:'mc',
+ prompt:"How does clay soil usually feel when it is wet?",
+ options:["Gritty","Dry and crumbly","Sticky","Rocky"],
+ correctIndex:2,
+ explanation:"Wet clay soil feels sticky because its tiny particles pack closely and cling to water and to your fingers."},
+{id:nq(),set:1,concept:'texture',difficulty:'medium',type:'mc',
+ prompt:"Loam feels slightly gritty, sticky, AND smooth. Why does it have all three textures?",
+ options:["Because it is pure clay","Because it combines large, medium, and small particles","Because it has no particles at all","Because it is always wet"],
+ correctIndex:1,
+ explanation:"Loam is a mixture of sand, silt, and clay, so it shows a combination of gritty, sticky, and smooth textures."},
+{id:nq(),set:1,concept:'color',difficulty:'easy',type:'mc',
+ prompt:"What does black or deep brown soil color usually tell you?",
+ options:["The soil has almost no nutrients","The soil is rich in humus","The soil is pure sand","The soil cannot hold water"],
+ correctIndex:1,
+ explanation:"Black or deep brown soil color generally means the soil has nutrient-rich humus in it."},
+{id:nq(),set:1,concept:'color',difficulty:'medium',type:'mc',
+ prompt:"A soil sample is light brown or tan colored. What does this most likely indicate?",
+ options:["Sandy soil","Clay soil rich in humus","Soil with iron oxide","Pure gravel"],
+ correctIndex:0,
+ explanation:"Light brown or tan soils usually indicate sandy soil."},
+{id:nq(),set:1,concept:'color',difficulty:'medium',type:'mc',
+ prompt:"A soil sample is red or yellow. What does this color often indicate?",
+ options:["High humus content","The presence of iron oxides","It is definitely gravel","It cannot support any plants"],
+ correctIndex:1,
+ explanation:"Red or yellow soils often indicate the presence of iron oxides, like the southern clay soils mentioned in the study guide."},
+{id:nq(),set:1,concept:'humus',difficulty:'easy',type:'mc',
+ prompt:"What is humus?",
+ options:["A type of rock","The dark, rich, spongy part of soil from decayed plants and animals","A tool used to measure soil","A synonym for sand"],
+ correctIndex:1,
+ explanation:"Humus is the dark, rich, spongy part of the soil made from dead leaves, plants, and animals that have broken down over time."},
+{id:nq(),set:1,concept:'humus',difficulty:'easy',type:'mc',
+ prompt:"Why is loam often called 'topsoil'?",
+ options:["Because it is only found deep underground","Because it is a combination of all particle sizes and rich in humus","Because it has no nutrients","Because it never holds water"],
+ correctIndex:1,
+ explanation:"Loam is sometimes called topsoil because it combines all particle sizes and is rich in nutrient-giving humus."},
+{id:nq(),set:1,concept:'waterRetention',difficulty:'easy',type:'mc',
+ prompt:"Why does sandy soil NOT retain water well?",
+ options:["Its particles are too small","Its large particles create air spaces that let water pass through quickly","It has too much humus","It is always dry to begin with"],
+ correctIndex:1,
+ explanation:"Sandy soil has large particles with air spaces between the grains, allowing water to pass through quickly instead of staying."},
+{id:nq(),set:1,concept:'waterRetention',difficulty:'easy',type:'mc',
+ prompt:"Why does clay soil retain a lot of water?",
+ options:["Its tiny particles pack tightly and water molecules cling to them","It has huge air spaces","It has no particles","It is the same as gravel"],
+ correctIndex:0,
+ explanation:"Clay's tiny, tightly packed particles cause water molecules to cling to them, so clay retains too much water and can drain poorly."},
+{id:nq(),set:1,concept:'drainage',difficulty:'easy',type:'mc',
+ prompt:"Which soil type drains water the FASTEST?",
+ options:["Clay","Silt","Gravel","Loam"],
+ correctIndex:2,
+ explanation:"Gravel has huge particles with large air spaces, so water passes through it very fast."},
+{id:nq(),set:1,concept:'drainage',difficulty:'medium',type:'mc',
+ prompt:"Which soil drains poorly and can become compact, sometimes drowning plant roots?",
+ options:["Sand","Clay","Gravel","Loam"],
+ correctIndex:1,
+ explanation:"Clay soil drains poorly and compacts easily, so plant roots may not get enough oxygen."},
+{id:nq(),set:1,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Which soil type is generally considered BEST for supporting a wide variety of plants?",
+ options:["Pure gravel","Pure clay","Pure sand","Loam"],
+ correctIndex:3,
+ explanation:"Loam balances drainage, water retention, and nutrients from humus, making it generally best for plant growth."},
+{id:nq(),set:1,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Why do root vegetables like carrots and potatoes often grow well in sandy soil?",
+ options:["Sandy soil holds too much water for roots","Sandy soil drains well, letting roots expand easily","Sandy soil has no air spaces","Sandy soil is always rich in humus"],
+ correctIndex:1,
+ explanation:"Sandy soil drains well and doesn't compact, allowing root vegetables to expand more easily as they grow."},
+{id:nq(),set:1,concept:'weathering',difficulty:'easy',type:'mc',
+ prompt:"What is weathering?",
+ options:["Rocks and soil forming instantly","The gradual breaking down of rocks over time","A type of soil color","Water evaporating from soil"],
+ correctIndex:1,
+ explanation:"Weathering is the gradual process of rocks and soil being broken down and changed over time."},
+{id:nq(),set:1,concept:'erosion',difficulty:'easy',type:'mc',
+ prompt:"What is erosion?",
+ options:["The process of soil forming underground","The movement of weathered rock and soil particles from one place to another","A tool used to observe soil","A type of plant root"],
+ correctIndex:1,
+ explanation:"Erosion is the process by which wind, water, or waves carry away and move rock and soil particles."},
+{id:nq(),set:1,concept:'erosion',difficulty:'easy',type:'mc',
+ prompt:"Which of these is NOT usually a major cause of erosion discussed in this unit?",
+ options:["Moving water in rivers and streams","Ocean waves","Wind","Sunlight alone"],
+ correctIndex:3,
+ explanation:"Sunlight alone is not the erosion process highlighted in this unit — moving water, waves, and wind are the key causes."},
+{id:nq(),set:1,concept:'weathering',difficulty:'medium',type:'mc',
+ prompt:"Soils are formed by the weathering of what?",
+ options:["Parent rock material","Only humus","Only water","Only air"],
+ correctIndex:0,
+ explanation:"Soils are formed by the weathering of parent rock material of various particle sizes."},
+{id:nq(),set:1,concept:'investigation',difficulty:'easy',type:'mc',
+ prompt:"What tools can help us investigate the properties of soil?",
+ options:["Hand lenses and touch","Only a microscope","Only our eyes","A calculator"],
+ correctIndex:0,
+ explanation:"Hand lenses and touch allow people to observe particle size, blends of colors, and textures of soils."},
+{id:nq(),set:1,concept:'investigation',difficulty:'medium',type:'tf',
+ prompt:"True or False: Looking at soil with a hand lens alone is enough to fully determine its texture.",
+ options:["True","False"],
+ correctIndex:1,
+ explanation:"False — to determine texture, you also need to touch and feel the soil, not just look at it."},
+{id:nq(),set:1,concept:'particleSize',difficulty:'medium',type:'mc',
+ prompt:"Which soil particle size is described as 'smaller than sand, but larger than clay'?",
+ options:["Gravel","Silt","Loam","Humus"],
+ correctIndex:1,
+ explanation:"Silt is smaller than sand but larger than clay particles."},
+{id:nq(),set:1,concept:'plantSupport',difficulty:'easy',type:'tf',
+ prompt:"True or False: All soil types support plant growth equally well.",
+ options:["True","False"],
+ correctIndex:1,
+ explanation:"False — soils differ in their ability to support plant growth, based on drainage, water retention, and nutrients."},
+{id:nq(),set:1,concept:'humus',difficulty:'medium',type:'mc',
+ prompt:"What does humus add to soil, water, and air spaces?",
+ options:["Nutrients","Only color, nothing else","Extra gravel","Less air"],
+ correctIndex:0,
+ explanation:"Humus, from the decay of dead plants and animals, adds nutrients to soil, water, and air spaces between particles."},
+{id:nq(),set:1,concept:'texture',difficulty:'easy',type:'mc',
+ prompt:"How does gravel typically feel?",
+ options:["Sticky","Smooth","Rocky","Powdery"],
+ correctIndex:2,
+ explanation:"Gravel feels rocky since it's made of huge particles."},
+{id:nq(),set:1,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"Students should be able to order soils by particle size because particle size impacts what?",
+ options:["The soil's ability to retain water","The soil's color only","How many worms live in it","Nothing important"],
+ correctIndex:0,
+ explanation:"Particle size impacts a soil's ability to retain water — larger particles retain less, smaller particles retain more."}
+);
+
+/* ---------- SET 2: SOIL DETECTIVE (25+) ---------- */
+QUESTIONS.push(
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ stimulus:"A soil sample has very large gray grains. It does not hold water, and it drains water very fast.",
+ prompt:"What type of soil is this most likely?",
+ options:["Clay","Gravel","Silt","Topsoil"],
+ correctIndex:1,
+ explanation:"Very large particles that don't hold water and drain fast match gravel's properties."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ stimulus:"A soil sample has microscopic particles, holds water well, does not drain, and is tan colored.",
+ prompt:"What type of soil is this most likely?",
+ options:["Gravel","Sand","Clay","Silt"],
+ correctIndex:2,
+ explanation:"Microscopic particles that hold water and don't drain well match the properties of clay."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ stimulus:"A soil sample has small particles, holds water, does NOT drain well, and is gray/tan colored.",
+ prompt:"Based on these clues, this soil is most likely:",
+ options:["Sand","Silt","Gravel","Topsoil"],
+ correctIndex:1,
+ explanation:"Small particles, holds water, doesn't drain — these match silt."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ stimulus:"A soil sample has medium particle size, holds water, drains water, and is dark brown colored.",
+ prompt:"This soil is most likely:",
+ options:["Gravel","Clay","Topsoil (loam)","Sand"],
+ correctIndex:2,
+ explanation:"Medium particle size that both holds water AND drains, plus dark brown color, matches topsoil/loam."},
+{id:nq(),set:2,concept:'soilID',difficulty:'easy',type:'mc',
+ stimulus:"A sample feels gritty when rubbed, is light brown/tan, and dries out quickly.",
+ prompt:"This is most likely which soil type?",
+ options:["Clay","Sand","Silt","Loam"],
+ correctIndex:1,
+ explanation:"Gritty texture, tan color, and quick drying are typical of sandy soil."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ stimulus:"A sample feels sticky when wet, is reddish in color, and stays soggy for a long time.",
+ prompt:"This is most likely which soil type?",
+ options:["Sand","Gravel","Clay","Silt"],
+ correctIndex:2,
+ explanation:"Sticky-when-wet texture, red color (iron oxide), and staying soggy are characteristic of clay soil."},
+{id:nq(),set:2,concept:'evidenceReasoning',difficulty:'medium',type:'mc',
+ stimulus:"Two students examine a soil sample. Student A says 'It's sandy because it looks tan.' Student B says 'It's sandy because it looks tan AND feels gritty AND drains fast.'",
+ prompt:"Which student has the stronger scientific explanation?",
+ options:["Student A, because color alone is enough","Student B, because using multiple pieces of evidence is stronger","Neither, color and texture don't matter","Student A, because touching soil is not necessary"],
+ correctIndex:1,
+ explanation:"Student B uses multiple types of evidence (color, texture, and drainage), which makes for a stronger conclusion than color alone."},
+{id:nq(),set:2,concept:'soilID',difficulty:'hard',type:'mc',
+ stimulus:"An unknown soil has grain size described as 'small,' holds water, drains poorly, and has a gray and tan color.",
+ prompt:"According to typical soil properties, this sample is most likely:",
+ options:["Sand","Silt","Gravel","Clay"],
+ correctIndex:1,
+ explanation:"Small grain size, holds water, poor drainage, gray/tan color are typical silt properties (as opposed to clay, which is microscopic and often tan alone)."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ prompt:"A gardener finds soil that is dark brown, holds a medium amount of water, drains well, and has lots of organic material mixed in. What is this soil most likely?",
+ options:["Gravel","Loam/topsoil","Pure clay","Pure sand"],
+ correctIndex:1,
+ explanation:"Dark brown color, balanced water retention/drainage, and organic material point to loam or topsoil."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ prompt:"Which single piece of evidence would be LEAST helpful on its own for identifying a soil sample?",
+ options:["Particle size observed with a hand lens","Only the soil's smell","Water retention test results","How the soil feels when rubbed"],
+ correctIndex:1,
+ explanation:"Smell is not one of the reliable properties (particle size, texture, color, water retention/drainage) used to classify soil in this unit."},
+{id:nq(),set:2,concept:'soilID',difficulty:'hard',type:'mc',
+ stimulus:"A student examines a soil sample with a hand lens and observes large particles. The student concludes the sample is sand and stops investigating.",
+ prompt:"What is the problem with the student's approach?",
+ options:["There is no problem; particle size is always enough","The student should also check texture, water retention, and drainage to be sure","Large particles always mean clay","Hand lenses cannot see particle size"],
+ correctIndex:1,
+ explanation:"One clue (particle size) is not enough on its own—checking multiple properties makes an identification more reliable."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ prompt:"Which combination of properties would you expect from a TRUE clay soil sample?",
+ options:["Large particles, fast drainage, gritty texture","Microscopic particles, holds water, sticky when wet","Huge particles, rocky texture, no water retention","Medium particles, balanced drainage, dark color"],
+ correctIndex:1,
+ explanation:"Clay is defined by microscopic particles, strong water retention, and a sticky wet texture."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'multiselect',
+ prompt:"Select ALL properties that would be evidence a sample is likely SANDY soil. (Select all that apply)",
+ options:["Gritty texture","Light brown/tan color","Sticky when wet","Drains water quickly","Holds water for a long time"],
+ correctIndices:[0,1,3],
+ explanation:"Sandy soil is gritty, often light brown/tan, and drains quickly. It is NOT sticky when wet, and it does not hold water for a long time."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'multiselect',
+ prompt:"Select ALL properties that would be evidence a sample is likely CLAY soil. (Select all that apply)",
+ options:["Sticky when wet","Drains very fast","Holds a lot of water","Often reddish or yellow due to iron oxide","Feels rocky and huge"],
+ correctIndices:[0,2,3],
+ explanation:"Clay is sticky when wet, holds a lot of water, and is often reddish/yellow from iron oxide. It does not drain fast or feel rocky/huge (that's gravel)."},
+{id:nq(),set:2,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"Mia digs a hole and finds soil made of very large gray grains. It does not hold water well.",
+ prompt:"Using the evidence, Mia most likely found:",
+ options:["Clay","Gravel","Silt","Topsoil"],
+ correctIndex:1,
+ explanation:"Very large grains that don't hold water well match gravel's known properties (large particles, poor water retention, fast drainage)."},
+{id:nq(),set:2,concept:'soilID',difficulty:'easy',type:'mc',
+ prompt:"Which property would help you tell sand apart from clay the FASTEST?",
+ options:["Whether it feels gritty (sand) or sticky when wet (clay)","The temperature of the soil","The time of day it was collected","The name of the field it came from"],
+ correctIndex:0,
+ explanation:"Texture (gritty vs. sticky) is a fast and reliable way to distinguish sand from clay."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ prompt:"A farmer needs a soil sample identified quickly and correctly. Which approach is BEST?",
+ options:["Guess based on the field's location","Combine hand lens observation, touch test, and a water test","Only smell the soil","Only look at the color from far away"],
+ correctIndex:1,
+ explanation:"Using multiple observation tools and tests (visual, touch, water) gives the most reliable identification."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ prompt:"Which soil sample description best matches 'topsoil'?",
+ options:["Medium grain size, holds water, drains water, dark brown","Microscopic grains, holds water, does not drain, tan","Very large grains, does not hold water, drains, gray","Small grains, holds water, does not drain, gray/tan"],
+ correctIndex:0,
+ explanation:"Topsoil is a mixture (loam) with medium particle size, dark brown color, and a balance of holding and draining water."},
+{id:nq(),set:2,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"Two soil samples are shown. Sample X has large loose particles you can clearly see individually. Sample Y looks like a compact, smooth clump with almost no visible individual particles.",
+ prompt:"Which sample would most likely hold MORE water, and why?",
+ options:["Sample X, because it has more visible particles","Sample Y, because it has smaller, tightly-packed particles","Sample X, because it has larger particles","Neither sample can hold water"],
+ correctIndex:1,
+ explanation:"Smaller, tightly packed particles (like Sample Y appears to have) create small spaces where water clings, resulting in higher water retention."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ prompt:"Which is the best FIRST step when trying to identify an unknown soil sample?",
+ options:["Guess without looking","Observe particle size, color, and texture using tools and senses","Immediately water the plant","Throw the sample away"],
+ correctIndex:1,
+ explanation:"The best first step is careful observation using tools (like a hand lens) and your senses (touch) to note particle size, color, and texture."},
+{id:nq(),set:2,concept:'soilID',difficulty:'hard',type:'mc',
+ stimulus:"A soil sample has a dark brown color, medium particle size, holds a good amount of water, and drains reasonably well, but it also feels somewhat gritty and slightly sticky.",
+ prompt:"This combination of texture and properties best matches:",
+ options:["Pure sand","Pure clay","Loam","Pure gravel"],
+ correctIndex:2,
+ explanation:"A combination of gritty and slightly sticky texture, balanced water retention/drainage, and dark color is characteristic of loam."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ prompt:"If a soil sample drains water almost instantly and has huge, rocky-feeling particles, it is most likely:",
+ options:["Clay","Silt","Gravel","Topsoil"],
+ correctIndex:2,
+ explanation:"Huge, rocky particles with almost instant drainage match gravel."},
+{id:nq(),set:2,concept:'soilID',difficulty:'medium',type:'mc',
+ prompt:"A soil scientist finds a sample that is gray and tan colored, has small particles, holds water, but does NOT drain well. What is it most likely?",
+ options:["Gravel","Sand","Silt","Clay only"],
+ correctIndex:2,
+ explanation:"Small particle size, holds water, poor drainage, gray/tan color matches silt's typical description."},
+{id:nq(),set:2,concept:'soilID',difficulty:'easy',type:'mc',
+ prompt:"Which of these is the BEST reason to use more than one clue when identifying soil?",
+ options:["It takes longer, which is always better","One clue can be misleading, but several clues that agree give more confidence","Only color matters in real science","Clues about soil are all randomly generated"],
+ correctIndex:1,
+ explanation:"A single clue might be misleading, but when multiple pieces of evidence agree, the identification is more reliable."}
+);
+
+/* ---------- SET 3: WATER, PLANTS & SOIL (25+) ---------- */
+QUESTIONS.push(
+{id:nq(),set:3,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"A farmer plants crops in sandy soil. What is the farmer's biggest water challenge?",
+ options:["The soil holds too much water and drowns the plants","The soil drains quickly, so the farmer must water more frequently","The soil never lets any water in","There is no water challenge in sandy soil"],
+ correctIndex:1,
+ explanation:"Because sandy soil drains quickly and holds less water, farmers must water sandy soil more frequently."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"A student plants two identical seeds — one in sand, one in clay — and waters both the same amount. A week later, the sand pot is bone dry. Why?",
+ options:["Sand held onto all the water","Sand's large particles let water drain through quickly, so less stayed behind","Clay evaporated all its water","Sand has more humus than clay"],
+ correctIndex:1,
+ explanation:"Sand's large particles create big air spaces, so water drains through quickly and doesn't stay in the pot."},
+{id:nq(),set:3,concept:'drainage',difficulty:'medium',type:'mc',
+ prompt:"Why might a gardener add sand to a garden bed that is mostly clay?",
+ options:["To make the soil retain even more water","To help improve water drainage","To remove all nutrients","To make the soil sticky"],
+ correctIndex:1,
+ explanation:"Sand is often added to clay soils to help improve drainage, since sand's large particles create more air spaces."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Why might a gardener add organic material (compost/humus) to clay soil?",
+ options:["To increase drainage and add oxygen for plant roots","To make the clay hold even more water","To remove all the clay","To make the soil rockier"],
+ correctIndex:0,
+ explanation:"Organic material helps improve drainage and oxygen content in clay soil, since clay alone drains poorly and can suffocate roots."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Why do trees and shrubs with long roots often survive in clay soil better than shallow-rooted plants?",
+ options:["Their long roots can search deeper for oxygen and less-compacted soil","Clay has no effect on any plants","Long roots don't need any water","Trees don't need soil at all"],
+ correctIndex:0,
+ explanation:"Long roots can reach past compact, poorly-drained upper clay layers to find air and less compacted soil deeper down."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"Which soil combination is described as holding water well AND providing good nutrients AND allowing decent drainage?",
+ options:["Pure gravel","Pure clay","Loam (sand + silt + clay + humus)","Pure sand"],
+ correctIndex:2,
+ explanation:"Loam's mixture of particle sizes plus humus provides a balance of water retention, drainage, and nutrients."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'hard',type:'mc',
+ stimulus:"A school garden club is choosing soil for a new vegetable bed. They want good drainage, moderate water retention, and rich nutrients.",
+ prompt:"Which soil should they choose?",
+ options:["Gravel","Pure sand","Loam","Pure clay"],
+ correctIndex:2,
+ explanation:"Loam offers a balance of drainage, water retention, and nutrients — ideal for a vegetable garden."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"Which experimental result would you expect if you poured equal water onto separate cups of sand and clay?",
+ options:["Water passes through sand quickly; water is slow to pass through clay","Water passes through clay quickly; sand holds all the water","Both drain at exactly the same speed","Neither cup lets any water through"],
+ correctIndex:0,
+ explanation:"Sand's large particles let water pass through quickly, while clay's tiny particles slow drainage significantly."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"Which soil sample would most likely need to be watered MORE OFTEN to keep plants healthy?",
+ options:["Clay soil","Sandy soil","Loam soil","Topsoil"],
+ correctIndex:1,
+ explanation:"Sandy soil holds less water and drains quickly, so plants in sandy soil need more frequent watering."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Sandy soil has a lower nutrient-holding capacity than other soils, so what does a farmer growing crops in sandy soil often need to do?",
+ options:["Water less and fertilize less","Fertilize more often","Never fertilize","Remove all humus"],
+ correctIndex:1,
+ explanation:"Because sandy soil has lower nutrient-holding capacity, it often needs to be fertilized more often."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'hard',type:'mc',
+ stimulus:"A scientist places the same amount of water on top of three soil columns: gravel, sand, and clay. She records how much water drips out the bottom after 1 minute.",
+ prompt:"Which soil would most likely have the LEAST amount of water drip out in that minute?",
+ options:["Gravel","Sand","Clay","All would be the same"],
+ correctIndex:2,
+ explanation:"Clay's tiny particles slow water movement dramatically, so the least water would drip out of the clay column in that short time."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"A plant is wilting in a pot of pure clay soil, even though it's watered regularly. What is the MOST likely explanation?",
+ options:["The clay is not holding enough water","The clay is compacted and roots aren't getting enough oxygen","There is too much sand in the pot","The plant needs less light"],
+ correctIndex:1,
+ explanation:"Clay compacts easily and drains poorly, which can prevent roots from getting the oxygen they need, causing the plant to struggle even with regular watering."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"Which statement about pore spaces (air spaces between particles) is TRUE?",
+ options:["Larger particles create larger pore spaces","Smaller particles create larger pore spaces","Pore spaces don't affect water movement","All soils have identical pore spaces"],
+ correctIndex:0,
+ explanation:"Larger particles, like in sand and gravel, create larger pore spaces (air spaces) between them, allowing water to move through faster."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"A school experiment compares plant growth in sand, clay, and loam over one month. Which soil would you PREDICT shows the healthiest average plant growth?",
+ options:["Sand","Clay","Loam","They would all be identical"],
+ correctIndex:2,
+ explanation:"Loam's balance of nutrients, water retention, and drainage typically supports the healthiest plant growth compared to pure sand or clay."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"Which best explains why humus helps soil retain water AND nutrients?",
+ options:["Humus is a type of rock that blocks water","Humus is a spongy organic material that can hold onto water and nutrients","Humus makes soil rockier","Humus has no effect on water"],
+ correctIndex:1,
+ explanation:"Humus is spongy, decayed organic material that can hold onto both water and nutrients, benefiting plant growth."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'hard',type:'mc',
+ stimulus:"A student is designing a garden bed for plants that like moist (but not soggy) soil with good nutrients.",
+ prompt:"Which soil mixture would likely work best?",
+ options:["Pure gravel only","Loam with added humus","Pure clay with no additions","Pure sand with no additions"],
+ correctIndex:1,
+ explanation:"Loam with added humus provides moist-but-not-soggy conditions plus good nutrients, matching the plant's needs."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'easy',type:'tf',
+ prompt:"True or False: Clay soil generally holds MORE water than sandy soil.",
+ options:["True","False"],
+ correctIndex:0,
+ explanation:"True — clay's tiny particles cling to water molecules, allowing it to hold much more water than sandy soil."},
+{id:nq(),set:3,concept:'drainage',difficulty:'easy',type:'tf',
+ prompt:"True or False: Sandy soil generally drains water FASTER than clay soil.",
+ options:["True","False"],
+ correctIndex:0,
+ explanation:"True — sandy soil's larger particles create bigger spaces, allowing water to drain through quickly."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Which soil property combination makes loam popular for gardens?",
+ options:["High drainage only, nothing else","Balanced drainage, water retention, and nutrients","No drainage at all","Only high water retention"],
+ correctIndex:1,
+ explanation:"Loam's balance of drainage, water retention, and nutrients (from humus) makes it a popular choice for gardens."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"A greenhouse worker notices seedlings in clay pots are constantly waterlogged. What soil change would help MOST?",
+ options:["Add more clay","Mix in sand or humus to improve drainage","Water even more often","Remove all soil"],
+ correctIndex:1,
+ explanation:"Mixing in sand or humus can improve drainage in overly wet clay soil, reducing waterlogging."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Which of these plants would likely do BEST in well-draining sandy soil, based on the study guide?",
+ options:["Water lilies that need standing water","Root vegetables like carrots and potatoes","Only plants that never need water","Plants that require constant flooding"],
+ correctIndex:1,
+ explanation:"Root vegetables like carrots and potatoes grow well in sandy soil because it drains well and doesn't compact around expanding roots."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'hard',type:'multiselect',
+ prompt:"Select ALL statements that are TRUE about water and soil particle size. (Select all that apply)",
+ options:["Larger particles = faster drainage","Larger particles = more water retention","Smaller particles = slower drainage","Smaller particles = more water retention"],
+ correctIndices:[0,2,3],
+ explanation:"Larger particles drain fast (and retain less water); smaller particles drain slowly and retain more water. 'Larger particles = more water retention' is false."},
+{id:nq(),set:3,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Why is loam considered easier to till (dig/work) than clay soil?",
+ options:["Loam is much heavier than clay","Loam has a better mix of particle sizes that doesn't compact as tightly as pure clay","Loam has no particles","Clay is always looser than loam"],
+ correctIndex:1,
+ explanation:"Loam's mixture of particle sizes doesn't compact as tightly as clay, making it easier to till."},
+{id:nq(),set:3,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"A student waters a sandy soil pot and a clay soil pot with the exact same amount of water at the exact same time. Which prediction is most reasonable?",
+ options:["Both pots will have identical moisture levels forever","The clay pot will likely stay moist longer than the sandy pot","The sandy pot will likely stay moist longer than the clay pot","Neither pot will ever dry out"],
+ correctIndex:1,
+ explanation:"Clay retains water much longer than sand due to its tiny, tightly packed particles, so the clay pot would likely stay moist longer."}
+);
+
+/* ---------- SET 4: ROCKS, WEATHERING & EROSION (25+) ---------- */
+QUESTIONS.push(
+{id:nq(),set:4,concept:'weathering',difficulty:'medium',type:'mc',
+ stimulus:"A rock falls from a mountain into a river below.",
+ prompt:"How would the rock most likely look 100 years later?",
+ options:["It would be smaller and smoother","It would be larger and smoother","It would be smaller and jagged","It would be larger and jagged"],
+ correctIndex:0,
+ explanation:"Moving water gradually wears away at rocks, making them smaller and smoother over long periods of time."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'mc',
+ stimulus:"An image shows an arch-shaped rock formation next to the ocean, with waves crashing against its base.",
+ prompt:"Which of these BEST explains how this landform was most likely created?",
+ options:["Early humans carved away the rocks","Plant roots broke down the rocks","Chemicals in the rocks caused them to break apart","Ocean waves and wind wore away the rocks over time"],
+ correctIndex:3,
+ explanation:"Ocean waves and wind gradually wearing away rock over time is the most likely explanation for such a coastal arch landform."},
+{id:nq(),set:4,concept:'erosion',difficulty:'hard',type:'mc',
+ stimulus:"Several friends stand on the side of Providence Canyon in Georgia, looking down at layers of rock and a river at the bottom.",
+ prompt:"Which statement correctly explains how the canyon most likely formed?",
+ options:["A huge flood rushed through and formed the canyon in one day","The canyon was dug by humans in less than a week","The river and streams slowly carved out the canyon over time","The canyon was formed instantly when the Earth was made"],
+ correctIndex:2,
+ explanation:"Providence Canyon, like most canyons, was slowly carved out over a very long time by the gradual action of rivers and streams."},
+{id:nq(),set:4,concept:'weathering',difficulty:'medium',type:'mc',
+ stimulus:"A picture shows a jagged rock formation that has clearly changed shape over a very long period of time, appearing worn on its edges.",
+ prompt:"Which BEST describes how this rock most likely changed shape?",
+ options:["The rock was worn away over time by gravity alone","The rock was worn away over time by wind","The rock was worn away over time by rain falling straight down only","The rock changed shape overnight"],
+ correctIndex:1,
+ explanation:"Wind is a common cause of gradual weathering that wears away exposed rock surfaces over long periods."},
+{id:nq(),set:4,concept:'erosion',difficulty:'easy',type:'mc',
+ prompt:"Which process describes rocks in a stream slowly becoming smoother and smaller?",
+ options:["Erosion by moving water","Photosynthesis","Soil color change","Humus formation"],
+ correctIndex:0,
+ explanation:"Moving water in a stream gradually erodes rocks, making them smoother and smaller over time."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'mc',
+ prompt:"How can wind affect soil over time, according to this unit?",
+ options:["Wind can cause ripples in soil or cause soil to lose moisture and nutrients over time","Wind always adds more nutrients to soil","Wind never affects soil","Wind only affects mountains, not soil"],
+ correctIndex:0,
+ explanation:"Wind can cause ripples in soil and cause it to lose moisture and nutrients over time."},
+{id:nq(),set:4,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Why is sandy soil especially vulnerable to erosion when plant cover is lacking?",
+ options:["Sandy soil's loose particles are easily carried away by wind and water without plant roots to hold them","Sandy soil has too much humus to erode","Sandy soil is always underground","Plants make erosion worse, not better"],
+ correctIndex:0,
+ explanation:"Without plant roots to anchor the loose, large particles, sandy soil is easily carried away by wind and water erosion."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'mc',
+ prompt:"Which best describes the difference between weathering and erosion?",
+ options:["They are exactly the same thing","Weathering breaks rock down; erosion moves the broken pieces to a new place","Weathering moves rock; erosion breaks it down","Neither involves rock or soil"],
+ correctIndex:1,
+ explanation:"Weathering is the breaking down of rock, while erosion is the movement of those weathered pieces to new locations."},
+{id:nq(),set:4,concept:'erosion',difficulty:'hard',type:'mc',
+ stimulus:"A canyon has distinct layers of rock visible, with a river still flowing at the bottom today.",
+ prompt:"What is the BEST evidence that moving water formed this canyon, rather than a single flood event?",
+ options:["The river is still there today, actively flowing and shaping the land","The rock layers are all one solid color","There are no plants nearby","The canyon has straight walls"],
+ correctIndex:0,
+ explanation:"The presence of a still-flowing river actively at the bottom is evidence consistent with a slow, ongoing carving process rather than a single instant event."},
+{id:nq(),set:4,concept:'weathering',difficulty:'medium',type:'mc',
+ prompt:"A large boulder near the ocean shore has become rounded over hundreds of years. What is the LEAST likely cause?",
+ options:["Ocean waves","Wind-blown sand","A single lightning strike","Water erosion over a long time"],
+ correctIndex:2,
+ explanation:"A single lightning strike would be a sudden event, not the kind of gradual process that rounds a boulder over hundreds of years."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'mc',
+ prompt:"Which of these processes happens over the SHORTEST amount of time?",
+ options:["A canyon being carved by a river","A boulder becoming smooth from ocean waves","A single rock rolling down a hill during a storm","A mountain range slowly eroding"],
+ correctIndex:2,
+ explanation:"A rock rolling down a hill during a storm happens quickly, unlike the slow processes of canyon carving, boulder smoothing, and mountain erosion."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'mc',
+ prompt:"Which landform is most likely formed mainly by the slow action of moving water over a very long time?",
+ options:["A sand dune formed in a single windstorm","A river canyon","A pile of leaves","A puddle after rain"],
+ correctIndex:1,
+ explanation:"River canyons are classic examples of landforms slowly carved by the long-term action of moving water."},
+{id:nq(),set:4,concept:'weathering',difficulty:'hard',type:'mc',
+ stimulus:"A student claims that a rock changed from jagged to smooth in a single afternoon after sitting in a stream.",
+ prompt:"Why is this claim likely INCORRECT?",
+ options:["Rocks never change shape","Weathering by water is a gradual process that takes a very long time, not one afternoon","Streams cannot weather rocks at all","Only wind can weather rocks"],
+ correctIndex:1,
+ explanation:"Weathering by moving water is a slow, gradual process that occurs over long periods of time — not within a single afternoon."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'mc',
+ prompt:"A beach loses sand every year due to strong waves. What process is happening?",
+ options:["Humus formation","Erosion by ocean waves","Soil color change","Weathering by sunlight only"],
+ correctIndex:1,
+ explanation:"The loss of sand due to strong wave action is a clear example of erosion caused by ocean waves."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'mc',
+ prompt:"Which investigation would BEST help students understand how moving water changes rocks over time?",
+ options:["Leaving a rock in a dry box for a week","Tumbling rocks in a container of water and sand and observing changes over several weeks","Painting a rock a new color","Weighing a dry rock once"],
+ correctIndex:1,
+ explanation:"Tumbling rocks with water and sand over time simulates and demonstrates how moving water gradually smooths and shapes rocks."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'tf',
+ prompt:"True or False: Canyons like Providence Canyon in Georgia typically form in less than a week.",
+ options:["True","False"],
+ correctIndex:1,
+ explanation:"False — canyons like Providence Canyon form gradually over very long periods of time due to the slow carving action of water."},
+{id:nq(),set:4,concept:'weathering',difficulty:'easy',type:'tf',
+ prompt:"True or False: Weathering and erosion happen quickly, usually within a single day.",
+ options:["True","False"],
+ correctIndex:1,
+ explanation:"False — weathering and erosion are typically slow, gradual processes that happen over long periods of time."},
+{id:nq(),set:4,concept:'erosion',difficulty:'hard',type:'mc',
+ stimulus:"A photo shows a rock arch over the ocean with visible wave action at its base and wind-carved textures on its surface.",
+ prompt:"Which combination of forces most likely created this arch?",
+ options:["Only earthquakes","Ocean waves and wind working together over time","Only human construction","Only rainfall"],
+ correctIndex:1,
+ explanation:"The combination of wave action at the base and wind-carved textures suggests both ocean waves and wind contributed to shaping this arch over time."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'mc',
+ prompt:"Which statement correctly compares weathering and erosion?",
+ options:["Weathering always happens after erosion, never before","Erosion cannot happen without some weathering occurring first or at the same time","Erosion and weathering are unrelated processes","Weathering only happens underwater"],
+ correctIndex:1,
+ explanation:"Erosion moves particles that have typically already been broken down (weathered) — the two processes are related, with weathering often preceding or accompanying erosion."},
+{id:nq(),set:4,concept:'erosion',difficulty:'medium',type:'mc',
+ prompt:"A hillside with no plants loses a lot of soil after heavy rain. What is the BEST explanation?",
+ options:["Without plant roots to hold soil in place, water erosion easily washes soil away","Plants would have made the erosion worse","Rain never causes erosion","The soil disappeared due to soil color change"],
+ correctIndex:0,
+ explanation:"Without plant roots anchoring the soil, moving water can more easily wash soil away during heavy rain, illustrating erosion."},
+{id:nq(),set:4,concept:'erosion',difficulty:'hard',type:'mc',
+ stimulus:"A river is observed over many years. Scientists notice that rocks near the river's bend are becoming increasingly rounded, while rocks far from any water remain jagged.",
+ prompt:"What is the BEST conclusion supported by this evidence?",
+ options:["Moving water is the cause of the rock shape change near the river","Rocks change shape regardless of water exposure","Jagged rocks always turn into sand instantly","There is no connection between water and rock shape"],
+ correctIndex:0,
+ explanation:"Since only rocks exposed to moving water became rounded while unexposed rocks remained jagged, moving water is the best-supported cause of the shape change."},
+{id:nq(),set:4,concept:'weathering',difficulty:'medium',type:'mc',
+ prompt:"Which best explains why rocks in a fast-moving mountain stream might smooth out faster than rocks in a slow, calm pond?",
+ options:["Faster-moving water can cause more rubbing/friction against rocks over time","Calm water always erodes faster","Fast water has no effect on rocks","Rocks in ponds always disappear"],
+ correctIndex:0,
+ explanation:"Faster-moving water creates more friction and impact against rocks, generally speeding up the smoothing process compared to calm water."}
+);
+
+/* ---------- SET 5: GEORGIA-STYLE SCIENCE REASONING (25+) ---------- */
+QUESTIONS.push(
+{id:nq(),set:5,concept:'investigation',difficulty:'medium',type:'mc',
+ stimulus:"A student wants to investigate to determine three different soil textures based on their particle size. The student says, 'I only need to use a hand lens to look at them. Then I will write down what I see. This will tell me all I need to know about their texture based on their particle size.'",
+ prompt:"Is the student correct in this thinking?",
+ options:["Yes, because a hand lens helps you see particle size and then you will know about the soils' texture","No, because to determine texture, you also need to know what the soils feel like","Yes, because to see the texture you just need to look at the soil closely","No, because you do not need to use a hand lens to determine the texture"],
+ correctIndex:1,
+ explanation:"Looking alone tells you about particle size, but texture also requires touching the soil — sight and touch together give the full picture."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ table:{headers:["Soil Type","Grain Size","Holds Water","Drains Water","Soil Color"],
+   rows:[["Clay","Microscopic","Yes","No","Tan"],["Gravel","Very Large","No","Yes","Gray"],["Sand","Large","No","Yes","Tan"],["Silt","Small","Yes","No","Gray and Tan"],["Topsoil","Medium","Yes","Yes","Dark Brown"]]},
+ stimulus:"Mia is digging a hole. She finds an unknown soil that is made of very large gray grains. It does not hold water well.",
+ prompt:"Based on the table, Mia most likely found which soil type?",
+ options:["Clay","Gravel","Silt","Topsoil"],
+ correctIndex:1,
+ explanation:"Very large gray grains that don't hold water match the Gravel row of the table exactly (Very Large, No, Yes, Gray)."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ table:{headers:["Soil Type","Grain Size","Holds Water","Drains Water","Soil Color"],
+   rows:[["Clay","Microscopic","Yes","No","Tan"],["Gravel","Very Large","No","Yes","Gray"],["Sand","Large","No","Yes","Tan"],["Silt","Small","Yes","No","Gray and Tan"],["Topsoil","Medium","Yes","Yes","Dark Brown"]]},
+ prompt:"Using the table, which soil holds water AND drains water?",
+ options:["Clay","Gravel","Silt","Topsoil"],
+ correctIndex:3,
+ explanation:"According to the table, Topsoil is the only soil listed that both holds water (Yes) and drains water (Yes)."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ table:{headers:["Soil Type","Grain Size","Holds Water","Drains Water","Soil Color"],
+   rows:[["Clay","Microscopic","Yes","No","Tan"],["Gravel","Very Large","No","Yes","Gray"],["Sand","Large","No","Yes","Tan"],["Silt","Small","Yes","No","Gray and Tan"],["Topsoil","Medium","Yes","Yes","Dark Brown"]]},
+ prompt:"A student finds a tan soil sample with large grains that does not hold water but does drain. According to the table, this is most likely:",
+ options:["Clay","Sand","Silt","Topsoil"],
+ correctIndex:1,
+ explanation:"The description (tan, large grains, does not hold water, drains) matches the Sand row exactly."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A short passage: 'Sandy soil holds less water than soils with smaller particles and therefore must be watered more frequently. Sandy soil also has a lower nutrient-holding capacity than other soil types.'",
+ prompt:"Which conclusion is BEST supported by this passage?",
+ options:["Sandy soil needs less watering and less fertilizer than other soils","Sandy soil needs more frequent watering and more frequent fertilizing than some other soils","Sandy soil never needs any water","Sandy soil has more nutrients than any other soil"],
+ correctIndex:1,
+ explanation:"The passage directly states sandy soil must be watered more frequently and has lower nutrient-holding capacity, implying more frequent fertilizing is needed too."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'medium',type:'mc',
+ stimulus:"A short passage: 'Clay soil has an ultra-fine texture that allows it to retain a high level of moisture and nutrients. Clay soil drains poorly and compacts too easily, so plants often do not receive the amount of oxygen they need to grow and thrive.'",
+ prompt:"Based on the passage, what is a DOWNSIDE of clay soil for most plants?",
+ options:["It has too many nutrients","It compacts and drains poorly, limiting oxygen for roots","It never holds any moisture","It is too gritty for roots to grow"],
+ correctIndex:1,
+ explanation:"The passage explains that clay compacts and drains poorly, which can prevent plant roots from getting enough oxygen."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A short passage: 'Loam is a combination of soil types (40% sand, 40% silt, and 20% clay). Loam soils generally contain more nutrients and humus than sandy soils, have better infiltration and drainage than silt soils, and are easier to till than clay soils.'",
+ prompt:"According to the passage, which statement is TRUE about loam?",
+ options:["Loam has worse drainage than silt soil","Loam is harder to till than clay soil","Loam generally has more nutrients than sandy soil","Loam is 100% clay"],
+ correctIndex:2,
+ explanation:"The passage states loam generally contains more nutrients and humus than sandy soils."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"Two students discuss why a river rock looks smooth. Student A says, 'It's smooth because it was born that way.' Student B says, 'It's smooth because moving water rubbed against it for a very long time.'",
+ prompt:"Which student has the better scientific explanation, and why?",
+ options:["Student A, because rocks are always smooth from formation","Student B, because it explains a process (erosion/weathering by water) supported by evidence","Both students are equally correct","Neither student's answer relates to science"],
+ correctIndex:1,
+ explanation:"Student B's answer describes an actual scientific process (weathering by moving water) that is well-supported by evidence, unlike Student A's unsupported claim."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"An investigation is planned: two identical cups get holes poked in the bottom. Cup 1 is filled with sand. Cup 2 is filled with clay. The same amount of water is poured into each cup at the same time, and students record how much water comes out the bottom after 2 minutes.",
+ prompt:"What is this investigation MOST likely designed to test?",
+ options:["Which soil is a better color","Which soil drains water faster","Which soil has more humus","Which soil is heavier"],
+ correctIndex:1,
+ explanation:"By comparing how much water drains through each cup in the same time, the investigation is testing drainage speed of sand vs. clay."},
+{id:nq(),set:5,concept:'investigation',difficulty:'hard',type:'mc',
+ stimulus:"In the cup investigation above (sand vs. clay drainage test), which of these is a variable that was correctly KEPT THE SAME between the two cups?",
+ options:["The type of soil used","The amount of water poured in","The color of the soil","The particle size"],
+ correctIndex:1,
+ explanation:"The amount of water poured into each cup was kept the same, making it a fair test — only the soil type (the variable being tested) was different."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A student says, 'I only tested one sample of clay soil, so I know for certain that ALL clay soil everywhere behaves the exact same way.'",
+ prompt:"What is the issue with this reasoning?",
+ options:["There is no issue; one sample proves an absolute rule for all clay everywhere","A single sample provides limited evidence; more testing across other samples strengthens the conclusion","Clay soil doesn't need to be tested at all","Testing multiple samples always weakens a conclusion"],
+ correctIndex:1,
+ explanation:"A single sample offers limited evidence. Good scientific practice involves testing multiple samples to strengthen and generalize conclusions."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'medium',type:'mc',
+ stimulus:"A picture shows a canyon with visible horizontal rock layers and a small river at the bottom.",
+ prompt:"Which observation from the picture provides the BEST evidence for how the canyon formed?",
+ options:["The color of the sky in the photo","The visible rock layers and the river still present at the bottom","The number of clouds","The size of the photo"],
+ correctIndex:1,
+ explanation:"Visible rock layers (showing gradual deposits) plus a still-active river at the bottom are the strongest visual evidence for slow water-based canyon formation."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A student is asked: 'Which soil sample would be best for a garden that needs good drainage but also decent nutrients?' Two answers are given: Answer 1 — 'Pure clay, because it holds lots of water.' Answer 2 — 'Loam, because it balances drainage, water retention, and nutrients from humus.'",
+ prompt:"Which answer is BEST supported by what we know about soil properties?",
+ options:["Answer 1, because more water is always better","Answer 2, because loam balances the needed properties","Both answers are equally good","Neither answer makes sense"],
+ correctIndex:1,
+ explanation:"Answer 2 correctly matches the garden's needs (drainage + nutrients) to loam's known balanced properties, while Answer 1 ignores the need for drainage."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'medium',type:'mc',
+ stimulus:"A rock sits in a fast-flowing river for 50 years. A similar rock sits untouched in a dry desert for 50 years.",
+ prompt:"Which rock would you expect to show MORE signs of smoothing from water erosion?",
+ options:["The rock in the river, because it has constant contact with moving water","The rock in the desert, because deserts are wetter than rivers","Both rocks would look identical","Neither rock would change at all"],
+ correctIndex:0,
+ explanation:"The rock in the river has constant contact with moving water, which causes gradual smoothing through erosion — much more than a rock sitting dry in the desert."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ table:{headers:["Soil Type","Grain Size","Holds Water","Drains Water","Soil Color"],
+   rows:[["Clay","Microscopic","Yes","No","Tan"],["Gravel","Very Large","No","Yes","Gray"],["Sand","Large","No","Yes","Tan"],["Silt","Small","Yes","No","Gray and Tan"],["Topsoil","Medium","Yes","Yes","Dark Brown"]]},
+ prompt:"Using the table, which TWO soils share the SAME answer for 'Holds Water' AND the same answer for 'Drains Water'?",
+ options:["Clay and Silt","Gravel and Sand","Sand and Topsoil","Clay and Topsoil"],
+ correctIndex:1,
+ explanation:"Gravel and Sand both show 'No' for Holds Water and 'Yes' for Drains Water in the table."},
+{id:nq(),set:5,concept:'investigation',difficulty:'medium',type:'mc',
+ prompt:"A student wants to test which soil supports plant growth best. Which of these would make the test UNFAIR?",
+ options:["Using the same type of seed in every pot","Giving each pot a different amount of sunlight","Watering all pots the same amount","Starting all pots on the same day"],
+ correctIndex:1,
+ explanation:"Giving pots different amounts of sunlight would introduce an extra variable, making it an unfair test since you couldn't tell if soil OR sunlight caused any differences."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A picture shows a large, smooth boulder sitting in the middle of a wide, calm desert with no rivers, lakes, or streams nearby.",
+ prompt:"Which explanation is LEAST likely for why this boulder is smooth?",
+ options:["Wind-blown sand slowly smoothed it over time","A river used to flow there long ago before drying up","It was smoothed instantly by a single sandstorm yesterday","Ancient water erosion shaped it before the climate changed"],
+ correctIndex:2,
+ explanation:"Smoothing by weathering/erosion is a gradual process over long periods — it's very unlikely a single sandstorm 'yesterday' would produce this effect."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'medium',type:'mc',
+ stimulus:"A passage states: 'Soil color that is black or deep brown generally means the soil has more nutrient-rich humus, such as loamy soils. Light brown or tan soils indicate a sandy soil. Red or yellow soils indicate the presence of iron oxides.'",
+ prompt:"A student finds bright yellow soil in their yard. What can they reasonably conclude?",
+ options:["The soil definitely has no nutrients at all","The soil likely contains iron oxides","The soil is definitely pure humus","The soil cannot support any plants"],
+ correctIndex:1,
+ explanation:"According to the passage, yellow (or red) soil color indicates the likely presence of iron oxides."},
+{id:nq(),set:5,concept:'investigation',difficulty:'hard',type:'mc',
+ stimulus:"A student investigation compares plant growth in three pots with different soils, but the pots also receive different amounts of water and different amounts of sunlight.",
+ prompt:"What is the main problem with this investigation's design?",
+ options:["There are too many pots","Multiple variables are changing at once, making it hard to know what caused any growth differences","There should be no soil in the pots","The investigation has no problems"],
+ correctIndex:1,
+ explanation:"When multiple variables (soil, water, sunlight) change at once, it becomes impossible to determine which variable actually caused any observed differences in plant growth."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'medium',type:'mc',
+ prompt:"Which of these questions is a testable SCIENCE question about soil?",
+ options:["Which soil color do you like best?","Which soil type drains water fastest: sand, silt, or clay?","Is dirt a fun word to say?","Which soil smells nicest?"],
+ correctIndex:1,
+ explanation:"'Which soil type drains water fastest' is testable through observation and measurement, unlike opinion-based questions about preference or smell."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A canyon photo shows curved walls, distinct rock layers, and a river at the bottom that appears to still be flowing and shaping the land.",
+ prompt:"Which piece of evidence BEST supports the idea that the canyon formation is an ONGOING process, not a finished one?",
+ options:["The rock layers are colorful","The river is still actively flowing at the bottom today","The canyon has curved walls","The photo was taken during the day"],
+ correctIndex:1,
+ explanation:"A river still actively flowing at the bottom suggests the erosion process that carved the canyon may still be ongoing today."},
+{id:nq(),set:5,concept:'evidenceReasoning',difficulty:'medium',type:'mc',
+ prompt:"Which is the BEST way to explain why an answer is correct in science?",
+ options:["Because it's my favorite answer","Because it matches the evidence and reasoning given","Because it was the first option listed","Because it is the shortest answer"],
+ correctIndex:1,
+ explanation:"The best scientific explanations are grounded in matching the actual evidence and using sound reasoning, not personal preference or answer position."},
+{id:nq(),set:5,concept:'investigation',difficulty:'medium',type:'mc',
+ prompt:"Before concluding that a soil sample is 'clay,' which of these would be the STRONGEST evidence-based approach?",
+ options:["Testing texture, particle size, water retention, and drainage together","Guessing based on the sample's location alone","Only checking the color","Asking a friend for their opinion"],
+ correctIndex:0,
+ explanation:"Combining multiple types of evidence (texture, particle size, water retention, drainage) gives the strongest, most reliable basis for identifying a soil sample."}
+);
+
+/* ---------- SET 6: BRAIN SWEAT CHALLENGE (25+) ---------- */
+QUESTIONS.push(
+{id:nq(),set:6,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A student wants to compare how quickly water drains through sand versus gravel. They pour water into a sand-filled tube and a gravel-filled tube, but the sand tube gets twice as much water as the gravel tube.",
+ prompt:"What is wrong with this investigation, and how could it be fixed?",
+ options:["Nothing is wrong; unequal water amounts are fine","The amount of water should be the same in both tubes for a fair comparison","Sand and gravel can't be compared","The tubes should be different sizes on purpose"],
+ correctIndex:1,
+ explanation:"To fairly compare drainage speed, the amount of water poured into each tube must be kept the same — only the soil type should differ."},
+{id:nq(),set:6,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"Two students argue about a canyon's formation. Student A says, 'Canyons always form from earthquakes, never from water.' Student B says, 'This canyon has a river at the bottom and rock layers, so water likely carved it slowly over time.'",
+ prompt:"Which student's reasoning is flawed, and why?",
+ options:["Student A, because they ignore the visible evidence of a river and rock layers","Student B, because rivers never affect canyons","Neither student is flawed","Both students are equally flawed"],
+ correctIndex:0,
+ explanation:"Student A makes an absolute claim ('always... never') while ignoring the specific evidence present (a river and rock layers) that points toward gradual water-based formation."},
+{id:nq(),set:6,concept:'plantSupport',difficulty:'hard',type:'mc',
+ stimulus:"A farmer has a field of pure sandy soil and wants to grow plants that need moderate water retention and good nutrients, without changing the field's location.",
+ prompt:"What is the BEST solution, based on soil science principles?",
+ options:["Do nothing and hope for rain","Mix in humus/organic material to improve water retention and nutrients","Remove all the sand and leave nothing","Add only more sand"],
+ correctIndex:1,
+ explanation:"Adding humus/organic material can improve a sandy soil's water retention and nutrient content without needing to relocate the field."},
+{id:nq(),set:6,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A soil sample is gray, has small particles, and holds water but drains poorly. A second sample is also gray, has microscopic particles, holds water, and drains poorly.",
+ prompt:"What is the KEY difference that would help you tell these two samples apart?",
+ options:["Their color, since both are gray","Their particle size — one is 'small' (silt) and one is 'microscopic' (clay)","There is no way to tell them apart","Whether they hold water, since both do"],
+ correctIndex:1,
+ explanation:"Since color and water behavior are the same for both, particle size (small = silt vs. microscopic = clay) becomes the key distinguishing clue."},
+{id:nq(),set:6,concept:'investigation',difficulty:'hard',type:'mc',
+ stimulus:"A student designs an investigation to see if soil color affects water retention. They use soil samples with different colors, but each sample also has a different particle size.",
+ prompt:"What is the flaw in this investigation's design?",
+ options:["There is no flaw","Having both color AND particle size differ makes it impossible to know which one causes any water retention differences","The samples should all be the same color", "Water retention cannot be tested at all"],
+ correctIndex:1,
+ explanation:"With two variables (color and particle size) changing at once, you can't determine which one is actually responsible for any differences observed in water retention."},
+{id:nq(),set:6,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A rock has been sitting at the bottom of a fast river for 200 years. A second, identical rock type has been sitting on a dry mountain top for 200 years, exposed only to occasional wind and rare rain.",
+ prompt:"Which rock would you predict has changed shape MORE, and why?",
+ options:["The river rock, because constant moving water causes more erosion than occasional wind and rain","The mountaintop rock, because wind is much stronger than water","Both rocks would change exactly the same amount","Neither rock would ever change"],
+ correctIndex:0,
+ explanation:"Constant exposure to moving water typically causes more erosion over time than occasional wind and rare rain exposure."},
+{id:nq(),set:6,concept:'plantSupport',difficulty:'hard',type:'mc',
+ stimulus:"A greenhouse has two identical plants. Plant A is in loam soil. Plant B is in pure clay soil. Both are watered the exact same amount weekly.",
+ prompt:"After one month, which plant would you PREDICT is healthier, and why?",
+ options:["Plant B, because clay holds more water so it's always better","Plant A, because loam balances water, air, and nutrients better than pure clay","They would be exactly equal","Plant B, because clay has no drainage issues"],
+ correctIndex:1,
+ explanation:"Loam's balance of water retention, drainage (which allows oxygen to roots), and nutrients typically supports healthier plant growth than pure clay, which can compact and limit oxygen."},
+{id:nq(),set:6,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A student claims: 'Since gravel drains fast, it must also be the best soil for growing all plants.'",
+ prompt:"What is the flaw in this student's reasoning?",
+ options:["There is no flaw; fast drainage always means best for plants","Fast drainage alone doesn't account for water retention or nutrients that many plants also need","Gravel is never good for anything","All plants need zero water"],
+ correctIndex:1,
+ explanation:"The student ignores that plants also need water retention and nutrients — properties gravel typically lacks — so fast drainage alone doesn't make it ideal for most plants."},
+{id:nq(),set:6,concept:'erosion',difficulty:'hard',type:'mc',
+ stimulus:"A coastal town notices its beach is losing sand every year. Someone proposes: 'Let's plant deep-rooted plants along the dunes to hold sand in place.'",
+ prompt:"Based on what you know about erosion, is this a reasonable solution?",
+ options:["No, plants have no effect on erosion","Yes, plant roots can help hold soil and sand in place, reducing erosion","No, plants would make the erosion much worse","Yes, but only if the plants are watered with salt water"],
+ correctIndex:1,
+ explanation:"Plant roots can help anchor soil and sand, which is a reasonable way to help reduce erosion caused by wind and waves."},
+{id:nq(),set:6,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A scientist finds a rock that is jagged AND has sharp edges, sitting right next to a rock that is smooth and rounded. Both rocks are the same type of stone and were found in the same riverbed.",
+ prompt:"What is the BEST explanation for the difference between these two rocks?",
+ options:["The jagged rock is much newer to the river (less time exposed to water erosion)","Both rocks must be different types of stone","The smooth rock was always smooth since it formed","There is no possible explanation"],
+ correctIndex:0,
+ explanation:"Since they're the same rock type, the most likely explanation is a difference in how long each rock has been exposed to the water's erosive action — the jagged one likely arrived more recently."},
+{id:nq(),set:6,concept:'investigation',difficulty:'hard',type:'mc',
+ stimulus:"A student investigation tests whether adding humus improves plant growth. Pot A gets sandy soil plus humus. Pot B gets sandy soil with no humus. Both pots get the same water, sunlight, and seed type.",
+ prompt:"If Pot A's plant grows noticeably better than Pot B's, what can the student reasonably conclude?",
+ options:["Nothing can be concluded from this test","The added humus likely contributed to the better growth, since it was the only variable that differed","Sunlight caused the difference","Water caused the difference"],
+ correctIndex:1,
+ explanation:"Since humus was the only variable that differed between the two pots (with water, sunlight, and seed type kept the same), it's reasonable to conclude humus likely contributed to better growth."},
+{id:nq(),set:6,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"An unknown soil sample has large particles like sand, but it also is very sticky when wet like clay.",
+ prompt:"Which is the MOST reasonable conclusion?",
+ options:["The sample cannot exist and the observation must be wrong","The sample may be a mixture of sand and clay particles, like loam","It must be pure gravel","It must be pure silt"],
+ correctIndex:1,
+ explanation:"A sample showing traits of both sand (large particles) and clay (sticky when wet) is most reasonably explained as a mixture, similar to loam."},
+{id:nq(),set:6,concept:'erosion',difficulty:'hard',type:'mc',
+ stimulus:"A mountain range has existed for millions of years. Scientists note it is shorter today than it was millions of years ago, based on rock layer evidence.",
+ prompt:"Which process BEST explains why the mountain range has become shorter over millions of years?",
+ options:["The mountains grew shorter overnight due to one storm","Gradual weathering and erosion wore down the mountains over a very long time","Mountains never change height","Humus formation shortened the mountains"],
+ correctIndex:1,
+ explanation:"Gradual weathering and erosion occurring over extremely long timescales (millions of years) is the process that wears down mountain ranges."},
+{id:nq(),set:6,concept:'plantSupport',difficulty:'hard',type:'mc',
+ stimulus:"A student is designing the 'best' soil mixture for a school garden using only sand, clay, and humus (no silt available).",
+ prompt:"Which combination would most likely create a soil closest in function to loam?",
+ options:["100% sand, 0% clay, 0% humus","A balanced mix of sand and clay, with humus added for nutrients","100% clay, 0% sand, 0% humus","100% humus, 0% sand, 0% clay"],
+ correctIndex:1,
+ explanation:"Balancing sand (for drainage) and clay (for water retention) while adding humus (for nutrients) mimics loam's beneficial properties."},
+{id:nq(),set:6,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"Two students examine the same rock. Student A says, 'This rock is smooth because it's a special rare rock type that starts out smooth.' Student B says, 'This rock is smooth because of years of erosion by water or wind, which is common for rocks in this location.'",
+ prompt:"Which explanation should be preferred, based on good scientific reasoning, and why?",
+ options:["Student A's, because rare explanations are usually right","Student B's, because it uses a common, well-supported process rather than an unproven rare claim","Both are equally good since we can't be sure","Neither is a valid scientific explanation"],
+ correctIndex:1,
+ explanation:"Student B's explanation relies on a common, well-evidenced process (erosion), which is generally preferred over an unproven claim about a 'special rare' rock type without supporting evidence."},
+{id:nq(),set:6,concept:'investigation',difficulty:'hard',type:'mc',
+ stimulus:"A student wants to know if particle size affects water retention. They test sand (large particles) against clay (tiny particles), keeping water amount, container size, and starting dryness the same.",
+ prompt:"Which variable is being intentionally changed (the one being tested)?",
+ options:["Water amount","Container size","Particle size / soil type","Starting dryness"],
+ correctIndex:2,
+ explanation:"Particle size (soil type) is the variable being intentionally changed and tested, while water amount, container size, and starting dryness are kept the same for a fair test."},
+{id:nq(),set:6,concept:'erosion',difficulty:'hard',type:'mc',
+ stimulus:"A river canyon has very tall, steep walls with clearly visible layers. Nearby, a shallow ditch dug by a garden hose over one afternoon has almost no visible layers.",
+ prompt:"What does comparing these two features suggest about the TIME needed to form large canyons?",
+ options:["Large canyons can form just as quickly as a garden hose ditch","Large canyons with many visible layers likely take a very long time to form, unlike the quick hose ditch","There is no difference between the two","Garden hose ditches always take longer than canyons"],
+ correctIndex:1,
+ explanation:"The complexity and scale of visible rock layers in a canyon (versus a simple ditch formed in an afternoon) suggests canyons require a very long time to form."},
+{id:nq(),set:6,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ prompt:"Which statement about scientific investigations is MOST accurate?",
+ options:["A fair test changes only ONE variable at a time while keeping others the same","A fair test changes as many variables as possible at once","A fair test needs no controls at all","A fair test always uses only one trial"],
+ correctIndex:0,
+ explanation:"A fair, well-designed test changes only one variable at a time while keeping all other conditions the same, so you can clearly identify what caused any observed effect."},
+{id:nq(),set:6,concept:'plantSupport',difficulty:'hard',type:'mc',
+ stimulus:"A student notices that a plant in sandy soil wilts quickly between waterings, while an identical plant in loam soil stays healthy on the same watering schedule.",
+ prompt:"What is the BEST scientific explanation for this difference?",
+ options:["Sandy soil drains faster and holds less water, so the plant dries out faster between waterings","The sandy soil plant just doesn't like being a plant","Loam soil never needs water at all","There's no possible soil-related explanation"],
+ correctIndex:0,
+ explanation:"Sandy soil's fast drainage and low water retention mean water is available to roots for a shorter time, causing quicker wilting between waterings compared to loam."}
+);
+
+/* ---------- SET 7: MASTERY EXAM (25+, mixed, fresh scenarios) ---------- */
+QUESTIONS.push(
+{id:nq(),set:7,concept:'particleSize',difficulty:'easy',type:'mc',
+ prompt:"Put these in order from SMALLEST to LARGEST particle size: sand, clay, gravel, silt.",
+ options:["Clay, silt, sand, gravel","Gravel, sand, silt, clay","Silt, clay, gravel, sand","Sand, clay, silt, gravel"],
+ correctIndex:0,
+ explanation:"From smallest to largest: clay, silt, sand, gravel."},
+{id:nq(),set:7,concept:'texture',difficulty:'medium',type:'mc',
+ stimulus:"A student is given a soil sample and told to determine if it's sand, clay, or loam using only a photograph (no touching allowed).",
+ prompt:"What is the biggest limitation of this approach?",
+ options:["Photos are always inaccurate", "The student cannot test texture (gritty vs. sticky) without touching it", "There is no limitation", "Photos show too much information"],
+ correctIndex:1,
+ explanation:"Without touching the sample, the student cannot assess texture, an important property for soil identification."},
+{id:nq(),set:7,concept:'color',difficulty:'medium',type:'mc',
+ prompt:"A soil sample is dark brown/black. What can you reasonably predict about it?",
+ options:["It is likely low in nutrients","It is likely rich in humus","It is definitely pure sand","It cannot support plant growth"],
+ correctIndex:1,
+ explanation:"Dark brown or black soil color is generally a sign of nutrient-rich humus."},
+{id:nq(),set:7,concept:'humus',difficulty:'medium',type:'mc',
+ prompt:"Why is humus important to include when building healthy garden soil?",
+ options:["It has no real purpose","It adds nutrients from decayed plants and animals, benefiting plant growth","It only affects soil color, nothing else","It removes all water from soil"],
+ correctIndex:1,
+ explanation:"Humus adds nutrients from decayed organic matter, which is important for healthy plant growth."},
+{id:nq(),set:7,concept:'waterRetention',difficulty:'medium',type:'mc',
+ stimulus:"A new gardener has only sandy soil and wants to grow plants that need consistently moist soil.",
+ prompt:"What is the BEST advice for this gardener?",
+ options:["Do nothing different; sandy soil is already great for moisture-loving plants","Mix in humus or clay to help the soil retain more water","Add more sand to increase moisture","Water only once a month"],
+ correctIndex:1,
+ explanation:"Adding humus or some clay can help sandy soil retain more moisture, better supporting plants that need consistently moist conditions."},
+{id:nq(),set:7,concept:'drainage',difficulty:'medium',type:'mc',
+ prompt:"Which soil type would be the WORST choice for a plant that needs excellent drainage and hates 'wet feet' (soggy roots)?",
+ options:["Gravel","Sand","Loam","Pure clay"],
+ correctIndex:3,
+ explanation:"Pure clay drains poorly and can become compacted and soggy, making it a poor choice for plants that need excellent drainage."},
+{id:nq(),set:7,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"Which soil is generally recommended for a garden that needs a BALANCE of drainage, water retention, and nutrients?",
+ options:["Pure gravel","Pure sand","Loam","Pure clay"],
+ correctIndex:2,
+ explanation:"Loam is the classic balanced soil, combining reasonable drainage, water retention, and nutrients."},
+{id:nq(),set:7,concept:'soilID',difficulty:'hard',type:'mc',
+ stimulus:"A sample is tan, has large particles, feels gritty, does not hold water well, and drains fast.",
+ prompt:"This sample is most likely:",
+ options:["Clay","Sand","Silt","Topsoil"],
+ correctIndex:1,
+ explanation:"Tan color, large gritty particles, poor water retention, and fast drainage are all hallmark properties of sand."},
+{id:nq(),set:7,concept:'weathering',difficulty:'medium',type:'mc',
+ prompt:"Which best defines weathering?",
+ options:["Rocks forming instantly from lava only","The gradual breaking down of rocks over time due to natural forces","A synonym for humus","The process of soil color changing due to paint"],
+ correctIndex:1,
+ explanation:"Weathering is the gradual breaking down of rocks over time due to natural forces like wind and water."},
+{id:nq(),set:7,concept:'erosion',difficulty:'medium',type:'mc',
+ stimulus:"A picture shows a wide, winding river valley with gently sloping sides and visible sediment deposits along the banks.",
+ prompt:"What process most likely created this valley shape over a long period of time?",
+ options:["A single flash flood","Gradual erosion by the flowing river over a long time","Wind alone, with no water involved","The valley was built by humans"],
+ correctIndex:1,
+ explanation:"The gentle slopes and sediment deposits are consistent with gradual erosion carved by a flowing river over a long period of time."},
+{id:nq(),set:7,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A student says a rock became smooth because 'rocks just naturally get smooth eventually, no cause needed.'",
+ prompt:"What is the problem with this statement?",
+ options:["Nothing is wrong; that's how science works","It doesn't explain an actual cause — real science looks for the process (like water or wind erosion) responsible for the change","Rocks never actually change shape","Only rain can smooth rocks"],
+ correctIndex:1,
+ explanation:"Good scientific explanations identify an actual cause or process (like erosion by water or wind), not just assume change happens 'naturally' with no explanation."},
+{id:nq(),set:7,concept:'investigation',difficulty:'hard',type:'mc',
+ stimulus:"A student is investigating which soil type best supports bean plant growth. They plant beans in sand, clay, and loam, all with equal water, sunlight, and starting seed size.",
+ prompt:"What is the ONE variable being tested (changed on purpose) in this investigation?",
+ options:["The amount of water","The amount of sunlight","The type of soil","The size of the pot"],
+ correctIndex:2,
+ explanation:"Since water, sunlight, and seed size are kept the same, soil type is the one variable intentionally changed in this fair test."},
+{id:nq(),set:7,concept:'soilID',difficulty:'medium',type:'multiselect',
+ prompt:"Select ALL properties that describe LOAM soil. (Select all that apply)",
+ options:["Mixture of sand, silt, and clay","Only one particle size","Good balance of drainage and water retention","Rich in nutrients from humus","Never used for gardening"],
+ correctIndices:[0,2,3],
+ explanation:"Loam is a mixture of particle sizes, offers a good balance of drainage and water retention, and is rich in nutrients from humus."},
+{id:nq(),set:7,concept:'waterRetention',difficulty:'medium',type:'mc',
+ prompt:"Which relationship is scientifically accurate?",
+ options:["Larger particles → smaller air spaces → more water retained","Larger particles → larger air spaces → faster drainage → less water retained","Smaller particles → larger air spaces → faster drainage","Particle size has no effect on water movement"],
+ correctIndex:1,
+ explanation:"Larger particles create larger air spaces, allowing faster drainage and resulting in less water retention overall."},
+{id:nq(),set:7,concept:'erosion',difficulty:'hard',type:'mc',
+ stimulus:"An old photograph of a coastal cliff from 100 years ago is compared to a recent photograph of the same cliff. The recent photo shows the cliff has lost a noticeable amount of rock and is set further back from the ocean.",
+ prompt:"What is the BEST explanation for this change over 100 years?",
+ options:["Ocean waves gradually eroded the cliff over time","The cliff grew a new layer of rock","The photographs must be of two different places","Humans moved the cliff intentionally"],
+ correctIndex:0,
+ explanation:"The gradual loss of rock and retreat of the cliff line over 100 years is best explained by ongoing erosion from ocean waves."},
+{id:nq(),set:7,concept:'plantSupport',difficulty:'medium',type:'mc',
+ prompt:"A farmer growing root vegetables (carrots, potatoes) chooses sandy soil. Which reason BEST explains this choice?",
+ options:["Sandy soil compacts tightly around growing roots","Sandy soil drains well and doesn't compact, letting roots expand more easily","Sandy soil never needs any water at all","Sandy soil is the only soil type that exists"],
+ correctIndex:1,
+ explanation:"Sandy soil's good drainage and loose structure (not compacting) make it easier for root vegetables to expand as they grow."},
+{id:nq(),set:7,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ table:{headers:["Soil Type","Grain Size","Holds Water","Drains Water","Soil Color"],
+   rows:[["Clay","Microscopic","Yes","No","Tan"],["Gravel","Very Large","No","Yes","Gray"],["Sand","Large","No","Yes","Tan"],["Silt","Small","Yes","No","Gray and Tan"],["Topsoil","Medium","Yes","Yes","Dark Brown"]]},
+ prompt:"According to the table, which soil type is described as tan, holds water, but does NOT drain water?",
+ options:["Sand","Gravel","Clay","Topsoil"],
+ correctIndex:2,
+ explanation:"The table shows Clay as tan colored, holds water (Yes), and does not drain (No)."},
+{id:nq(),set:7,concept:'humus',difficulty:'medium',type:'mc',
+ prompt:"Which best explains why topsoil (loam) is often considered the richest soil for growing plants?",
+ options:["It contains a mixture of particle sizes plus humus, balancing water, air, and nutrients","It is pure clay with no other particles","It never needs water","It has no organic material at all"],
+ correctIndex:0,
+ explanation:"Topsoil/loam's mixture of particle sizes plus humus balances water retention, air space (drainage), and nutrients — making it ideal for plant growth."},
+{id:nq(),set:7,concept:'erosion',difficulty:'medium',type:'mc',
+ prompt:"Which scenario is the BEST real-world example of erosion (not just weathering)?",
+ options:["A rock cracking in place due to freezing water inside it","A river carrying sand and small rocks downstream to a new location","A rock changing color due to sunlight","A rock staying in exactly the same spot forever"],
+ correctIndex:1,
+ explanation:"Erosion specifically involves the movement of weathered material — a river carrying sand and rocks downstream to a new location is a clear example of erosion, not just weathering."},
+{id:nq(),set:7,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"A student is asked to identify an unknown soil sample. They are given only ONE clue: the soil is tan colored.",
+ prompt:"Why is this single clue NOT enough to confidently identify the soil?",
+ options:["Tan color alone matches multiple soil types (like both sand and clay can be tan)","Tan is not a real soil color","Color is never useful in soil science","There's no way to identify any soil ever"],
+ correctIndex:0,
+ explanation:"According to the properties table, both sand and clay can appear tan colored, so color alone is not enough to confidently distinguish between them — more clues (particle size, water behavior) are needed."},
+{id:nq(),set:7,concept:'investigation',difficulty:'hard',type:'mc',
+ prompt:"Which of these is the BEST description of a 'fair test' in a science investigation?",
+ options:["A test where every variable changes at once for maximum information","A test where only the variable being studied changes, and everything else stays the same","A test with no measurements at all","A test that is repeated only one time and never checked again"],
+ correctIndex:1,
+ explanation:"A fair test changes only the variable being studied, while keeping all other conditions the same, so any effect can be confidently linked to that one variable."},
+{id:nq(),set:7,concept:'plantSupport',difficulty:'hard',type:'mc',
+ stimulus:"A school is building three garden beds: one for cactus (needs excellent drainage, low water), one for ferns (needs high water retention), and one for tomatoes (needs a balance of drainage and water retention).",
+ prompt:"Which soil pairing makes the MOST sense for these three plants?",
+ options:["Cactus→clay, Ferns→sand, Tomatoes→gravel","Cactus→sand/gravel, Ferns→clay-rich soil, Tomatoes→loam","Cactus→loam, Ferns→gravel, Tomatoes→sand","All three plants should use the exact same soil"],
+ correctIndex:1,
+ explanation:"Cacti thrive with fast-draining sand/gravel, ferns benefit from more water-retentive clay-rich soil, and tomatoes do well in balanced loam."},
+{id:nq(),set:7,concept:'weathering',difficulty:'hard',type:'mc',
+ stimulus:"A very old gravestone made of stone shows letters that were once sharp and deep but are now worn smooth and hard to read, after 150 years outdoors.",
+ prompt:"What is the BEST scientific explanation for the worn letters?",
+ options:["The letters were never actually carved deeply","Weathering by wind, rain, and time gradually wore down the stone's surface","The gravestone teleported to a new location","Stone never changes over time"],
+ correctIndex:1,
+ explanation:"Long-term weathering from wind, rain, and time gradually wears down exposed stone surfaces, which explains why old carved letters become smooth and hard to read."},
+{id:nq(),set:7,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
+ stimulus:"Final scenario: A student examines an unknown soil. It is dark brown, has a medium particle size (a mix of large and small), holds a good amount of water, drains reasonably well, and feels gritty-but-slightly-sticky.",
+ prompt:"Based on ALL these combined clues, what is the BEST identification for this soil?",
+ options:["Pure gravel","Pure sand","Loam/Topsoil","Pure clay"],
+ correctIndex:2,
+ explanation:"Dark brown color, mixed medium particle size, balanced water retention/drainage, and a gritty-sticky texture combination are the classic, complete signature of loam/topsoil."}
+);
+
+/* Assign IDs already done via nq(). Build lookup */
+const QUESTIONS_BY_ID = {};
+QUESTIONS.forEach(q=>{ QUESTIONS_BY_ID[q.id]=q; });
+
+const SET_INFO = [
+  null,
+  {title:"Set 1: Foundations", desc:"Core vocabulary & essential facts about soil and Earth changes.", color:"linear-gradient(135deg,#4dd0e1,#0288a8)", level:"Easy → Medium"},
+  {title:"Set 2: Soil Detective", desc:"Identify soil types from clues like color, texture, and water behavior.", color:"linear-gradient(135deg,#8e6fd1,#5c3fa0)", level:"Medium"},
+  {title:"Set 3: Water, Plants & Soil", desc:"How particle size connects to drainage, water retention, and plant growth.", color:"linear-gradient(135deg,#4caf50,#2e7d32)", level:"Medium"},
+  {title:"Set 4: Rocks, Weathering & Erosion", desc:"Cause-and-effect thinking about how rocks and landforms change.", color:"linear-gradient(135deg,#ff8a65,#d84315)", level:"Medium → Hard"},
+  {title:"Set 5: Georgia-Style Reasoning", desc:"Passages, tables, and evidence-based reasoning questions.", color:"linear-gradient(135deg,#5c6bc0,#303f9f)", level:"Hard"},
+  {title:"Set 6: Brain Sweat Challenge", desc:"Two-step reasoning, flawed logic, and investigation design.", color:"linear-gradient(135deg,#ec407a,#ad1457)", level:"Hard"},
+  {title:"Set 7: Mastery Exam", desc:"Your championship test — fresh scenarios covering everything.", color:"linear-gradient(135deg,#f5c542,#c98a00)", level:"All Levels"}
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+function defaultState(){
+  return {
+    mastery: Object.fromEntries(CONCEPTS.map(c=>[c.id,{correct:0,attempts:0,streakCorrect:0}])),
+    setBest: {1:0,2:0,3:0,4:0,5:0,6:0,7:0},
+    setCompletions: {1:0,2:0,3:0,4:0,5:0,6:0,7:0},
+    totalCorrect:0, totalAttempts:0, hintsUsed:0,
+    currentStreak:0, bestStreak:0,
+    badges: [],
+    mistakes: [], // {qid, concept, yourAnswer, correctAnswer, explanation, ts}
+    lastActivity: null
+  };
+}
+let STATE = lsGet(STATE_KEY, defaultState());
+function saveState(){ lsSet(STATE_KEY, STATE); }
+
+function recordAnswer(q, correct, chosenLabel, hintsUsedThisQ){
+  STATE.totalAttempts++;
+  if(correct) STATE.totalCorrect++;
+  const m = STATE.mastery[q.concept];
+  m.attempts++;
+  if(correct){
+    m.correct++; m.streakCorrect++;
+    STATE.currentStreak++;
+    if(STATE.currentStreak > STATE.bestStreak) STATE.bestStreak = STATE.currentStreak;
+  } else {
+    m.streakCorrect = 0;
+    STATE.currentStreak = 0;
+    STATE.mistakes.unshift({
+      qid:q.id, concept:q.concept, set:q.set,
+      questionSummary:q.prompt.slice(0,140),
+      yourAnswer: chosenLabel,
+      correctAnswer: getCorrectLabel(q),
+      explanation: q.explanation,
+      ts: Date.now()
+    });
+    if(STATE.mistakes.length>60) STATE.mistakes.pop();
+  }
+  if(hintsUsedThisQ>0) STATE.hintsUsed += hintsUsedThisQ;
+  checkBadges();
+  saveState();
+}
+
+function getCorrectLabel(q){
+  if(q.type==='multiselect'){
+    return q.correctIndices.map(i=>q.options[i]).join(', ');
+  }
+  return q.options[q.correctIndex];
+}
+
+function conceptPct(id){
+  const m = STATE.mastery[id];
+  if(!m || m.attempts===0) return 0;
+  return Math.round((m.correct/m.attempts)*100);
+}
+function overallPct(){
+  if(STATE.totalAttempts===0) return 0;
+  return Math.round((STATE.totalCorrect/STATE.totalAttempts)*100);
+}
+function masteryBand(pct){
+  if(pct>=95) return {label:"Science Master", color:"#8e6fd1"};
+  if(pct>=85) return {label:"Milestone Ready", color:"#4caf50"};
+  if(pct>=75) return {label:"Strong Scientist", color:"#0288a8"};
+  if(pct>=60) return {label:"Developing Scientist", color:"#f5c542"};
+  return {label:"Building Foundations", color:"#e57373"};
+}
+
+const ALL_BADGES = [
+  {id:'first_correct', name:'First Steps', test:s=>s.totalCorrect>=1},
+  {id:'streak5', name:'Hot Streak (5)', test:s=>s.bestStreak>=5},
+  {id:'streak10', name:'Streak Master (10)', test:s=>s.bestStreak>=10},
+  {id:'set1_done', name:'Soil Detective', test:s=>s.setCompletions[2]>=1},
+  {id:'set4_done', name:'Rock Scientist', test:s=>s.setCompletions[4]>=1},
+  {id:'set7_done', name:'Science Unit One Champion', test:s=>s.setCompletions[7]>=1},
+  {id:'all_sets', name:'Master of Loam', test:s=>Object.values(s.setCompletions).every(v=>v>=1)},
+  {id:'ninety5', name:'Particle Pro (95%+ on a set)', test:s=>Object.values(s.setBest).some(v=>v>=95)},
+  {id:'evidence_pro', name:'Evidence Explorer', test:s=>conceptPct('evidenceReasoning')>=80 && s.mastery.evidenceReasoning.attempts>=8},
+  {id:'water_wizard', name:'Water Wizard', test:s=>conceptPct('waterRetention')>=80 && s.mastery.waterRetention.attempts>=6},
+  {id:'erosion_expert', name:'Erosion Expert', test:s=>conceptPct('erosion')>=80 && s.mastery.erosion.attempts>=6}
+];
+function checkBadges(){
+  ALL_BADGES.forEach(b=>{
+    if(!STATE.badges.includes(b.id) && b.test(STATE)){
+      STATE.badges.push(b.id);
+    }
+  });
+}
+
+/* ============================================================
+   RENDER ENGINE (simple hash-based router)
+   ============================================================ */
+const root = document.getElementById('app');
+let currentQuizSession = null; // {setNum, questions:[], idx, answers:[], hintsThisQ:0, missedInThisRun:[]}
+
+function el(tag, props, ...children){
+  const e = document.createElement(tag);
+  if(props) Object.entries(props).forEach(([k,v])=>{
+    if(k==='class') e.className=v;
+    else if(k==='html') e.innerHTML=v;
+    else if(k.startsWith('on') && typeof v==='function') e.addEventListener(k.slice(2), v);
+    else if(v!==null && v!==undefined) e.setAttribute(k,v);
+  });
+  children.flat().forEach(c=>{
+    if(c===null||c===undefined) return;
+    if(typeof c==='string' || typeof c==='number') e.appendChild(document.createTextNode(c));
+    else e.appendChild(c);
+  });
+  return e;
+}
+
+function render(){
+  root.innerHTML='';
+  root.appendChild(buildTopbar());
+  const view = window.location.hash.replace('#','') || 'home';
+  if(view==='home') root.appendChild(buildHome());
+  else if(view.startsWith('preQuiz-')) root.appendChild(buildPreQuiz(parseInt(view.split('-')[1])));
+  else if(view==='quiz') root.appendChild(buildQuizScreen());
+  else if(view==='report') root.appendChild(buildReport());
+  else if(view==='dashboard') root.appendChild(buildDashboard());
+  else if(view==='mistakes') root.appendChild(buildMistakes());
+  else if(view==='lessons') root.appendChild(buildLessons());
+  else if(view==='labs') root.appendChild(buildLabsHome());
+  else if(view.startsWith('lab-')) root.appendChild(buildLab(view.split('-')[1]));
+  else if(view==='parent') root.appendChild(buildParentView());
+  else root.appendChild(buildHome());
+  root.appendChild(buildFooter());
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', render);
+
+function buildTopbar(){
+  const pct = overallPct();
+  const band = masteryBand(pct);
+  return el('div',{class:'topbar'},
+    el('div',{class:'title'}, '🌎 Soil & Earth ', el('span',{},'Mastery Academy')),
+    el('div',{class:'pill'}, `Overall: ${pct}% · ${band.label}`)
+  );
+}
+function buildFooter(){
+  return el('footer',{class:'appfoot'}, 'Science Unit One Mastery Academy · Practice questions are original and modeled after typical Grade 3 Georgia science reasoning skills, not official state test items.');
+}
+
+/* -------- HOME -------- */
+function buildHome(){
+  const wrap = el('div',{});
+  const pct = overallPct();
+  const band = masteryBand(pct);
+
+  wrap.appendChild(el('div',{class:'card'},
+    el('div',{class:'flex-between'},
+      el('div',{},
+        el('h1',{},'Welcome, Scientist! 🔬'),
+        el('p',{}, 'Master soil properties, weathering, and erosion through 7 challenge levels.')
+      ),
+      el('div',{class:'mastery-ring', style:`background:${band.color}`}, pct+'%')
+    ),
+    el('p',{}, el('strong',{}, `Current Level: ${band.label}`)),
+    el('div',{class:'home-nav'},
+      el('button',{class:'btn', onclick:()=>{window.location.hash='#preQuiz-'+recommendedSet();}}, '▶ Continue Learning'),
+      el('button',{class:'btn secondary', onclick:()=>{window.location.hash='#dashboard';}}, '📊 Mastery Dashboard'),
+      el('button',{class:'btn purple', onclick:()=>{window.location.hash='#mistakes';}}, '📓 Mistake Notebook'),
+      el('button',{class:'btn ghost', onclick:()=>{window.location.hash='#lessons';}}, '💡 Mini Lessons'),
+      el('button',{class:'btn ghost', onclick:()=>{window.location.hash='#labs';}}, '🧪 Interactive Labs'),
+      el('button',{class:'btn ghost', onclick:()=>{window.location.hash='#parent';}}, '👪 Parent/Teacher View')
+    )
+  ));
+
+  if(STATE.badges.length>0){
+    const bwrap = el('div',{class:'card'}, el('h3',{},'🏅 Your Badges'));
+    const bdiv = el('div',{});
+    STATE.badges.forEach(bid=>{
+      const b = ALL_BADGES.find(x=>x.id===bid);
+      if(b) bdiv.appendChild(el('span',{class:'badge'}, '🏅 '+b.name));
+    });
+    bwrap.appendChild(bdiv);
+    wrap.appendChild(bwrap);
+  }
+
+  wrap.appendChild(el('h2',{style:'color:#fff;margin:18px 4px 6px;'}, '7 Quiz Sets'));
+  const grid = el('div',{class:'grid'});
+  for(let i=1;i<=7;i++){
+    const info = SET_INFO[i];
+    const best = STATE.setBest[i];
+    const completions = STATE.setCompletions[i];
+    grid.appendChild(
+      el('button',{class:'set-card', style:`background:${info.color}`, onclick:()=>{window.location.hash='#preQuiz-'+i;}},
+        el('h3',{}, info.title),
+        el('div',{class:'desc'}, info.desc),
+        el('div',{style:'font-size:0.75rem;opacity:0.9;'}, `Level: ${info.level} · Completed ${completions}x`),
+        el('div',{class:'progressbar-outer'}, el('div',{class:'progressbar-inner', style:`width:${best}%`})),
+        el('div',{style:'font-size:0.8rem;margin-top:4px;'}, `Best score: ${best}%`)
+      )
+    );
+  }
+  wrap.appendChild(grid);
+
+  const recSet = recommendedSet();
+  wrap.appendChild(el('div',{class:'card'},
+    el('h3',{},'🎯 Recommended Next Activity'),
+    el('p',{}, recommendationText(recSet)),
+    el('button',{class:'btn green', onclick:()=>{window.location.hash='#preQuiz-'+recSet;}}, `Start ${SET_INFO[recSet].title}`)
+  ));
+
+  return wrap;
+}
+
+function recommendedSet(){
+  // recommend the lowest-completed / lowest scoring set in order, else weak concept practice
+  for(let i=1;i<=7;i++){
+    if(STATE.setCompletions[i]===0) return i;
+  }
+  // all completed at least once -> find lowest best score
+  let lowest=1, lowestScore=101;
+  for(let i=1;i<=7;i++){
+    if(STATE.setBest[i]<lowestScore){ lowestScore=STATE.setBest[i]; lowest=i; }
+  }
+  return lowest;
+}
+function recommendationText(setNum){
+  if(STATE.setCompletions[setNum]===0){
+    return `You haven't tried ${SET_INFO[setNum].title} yet. Let's build your skills here next!`;
+  }
+  return `Your best score on ${SET_INFO[setNum].title} is ${STATE.setBest[setNum]}%. A bit more practice here will boost your mastery!`;
+}
+
+/* -------- PRE-QUIZ SCREEN -------- */
+function buildPreQuiz(setNum){
+  const info = SET_INFO[setNum];
+  const setQuestions = QUESTIONS.filter(q=>q.set===setNum);
+  const concepts = [...new Set(setQuestions.map(q=>q.concept))].map(id=>CONCEPTS.find(c=>c.id===id).name);
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{}, info.title));
+  wrap.appendChild(el('p',{}, info.desc));
+  wrap.appendChild(el('p',{}, el('strong',{},'Concepts covered: '), concepts.join(', ')));
+  wrap.appendChild(el('p',{}, el('strong',{},'Challenge level: '), info.level));
+  wrap.appendChild(el('p',{}, el('strong',{},'Number of questions: '), setQuestions.length));
+  wrap.appendChild(el('p',{}, el('strong',{},'Your previous best score: '), STATE.setBest[setNum]+'%'));
+  wrap.appendChild(el('p',{}, el('strong',{},'Mastery target: '), '75% or higher (Strong Scientist)'));
+  wrap.appendChild(el('div',{},
+    el('button',{class:'btn green', onclick:()=>startQuiz(setNum,false)}, '▶ Start Quiz'),
+    el('button',{class:'btn secondary', onclick:()=>startQuiz(setNum,true)}, '🎯 Practice Missed Questions Only'),
+    el('button',{class:'btn ghost', onclick:()=>{window.location.hash='#home';}}, '← Back')
+  ));
+  return wrap;
+}
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function startQuiz(setNum, missedOnly){
+  let pool = QUESTIONS.filter(q=>q.set===setNum);
+  if(missedOnly){
+    const missedIds = new Set(STATE.mistakes.filter(m=>m.set===setNum).map(m=>m.qid));
+    const filtered = pool.filter(q=>missedIds.has(q.id));
+    pool = filtered.length>0 ? filtered : pool;
+  }
+  const questions = shuffle(pool).map(q=>{
+    // randomize option order but preserve correctness mapping
+    if(q.type==='mc' || q.type==='tf'){
+      const idxArr = q.options.map((opt,i)=>({opt,i}));
+      const shuffled = shuffle(idxArr);
+      return {...q, _options: shuffled.map(x=>x.opt), _correctIndex: shuffled.findIndex(x=>x.i===q.correctIndex)};
+    } else if(q.type==='multiselect'){
+      const idxArr = q.options.map((opt,i)=>({opt,i}));
+      const shuffled = shuffle(idxArr);
+      const correctSet = new Set(q.correctIndices);
+      const newCorrect = shuffled.map((x,newI)=>correctSet.has(x.i)?newI:null).filter(x=>x!==null);
+      return {...q, _options: shuffled.map(x=>x.opt), _correctIndices: newCorrect};
+    }
+    return {...q, _options:q.options, _correctIndex:q.correctIndex};
+  });
+  currentQuizSession = {
+    setNum, questions, idx:0, correctCount:0, hintsThisQ:0,
+    answered:false, selected:null, selectedMulti:[], reveal:false,
+    log:[]
+  };
+  window.location.hash='quiz';
+}
+
+/* -------- QUIZ SCREEN -------- */
+function buildQuizScreen(){
+  const s = currentQuizSession;
+  if(!s){ window.location.hash='#home'; return el('div',{}); }
+  const q = s.questions[s.idx];
+  const wrap = el('div',{class:'card'});
+  const progressPct = Math.round((s.idx/s.questions.length)*100);
+
+  wrap.appendChild(el('div',{class:'qmeta'},
+    el('span',{}, `Question ${s.idx+1} of ${s.questions.length}`),
+    el('span',{class:'conceptTag'}, CONCEPTS.find(c=>c.id===q.concept).name),
+    el('span',{}, `Score: ${s.correctCount}/${s.idx + (s.answered?1:0)}`)
+  ));
+  wrap.appendChild(el('div',{class:'progressbar-outer'}, el('div',{class:'progressbar-inner', style:`width:${progressPct}%;background:#4caf50;`})));
+
+  if(q.table){
+    const tbl = el('table',{class:'datatable'});
+    const thead = el('tr',{}); q.table.headers.forEach(h=>thead.appendChild(el('th',{},h)));
+    tbl.appendChild(thead);
+    q.table.rows.forEach(r=>{
+      const tr = el('tr',{}); r.forEach(c=>tr.appendChild(el('td',{},c)));
+      tbl.appendChild(tr);
+    });
+    wrap.appendChild(el('div',{class:'qstim'}, el('strong',{},'Soil Properties Table'), tbl));
+  }
+  if(q.stimulus){
+    wrap.appendChild(el('div',{class:'qstim'}, q.stimulus));
+  }
+
+  wrap.appendChild(el('h3',{}, q.prompt));
+
+  const optWrap = el('div',{});
+  if(q.type==='multiselect'){
+    q._options.forEach((opt,i)=>{
+      const isSel = s.selectedMulti.includes(i);
+      const box = el('div',{class:'msel-box'+(isSel?' selected':''), tabindex:'0', role:'checkbox', 'aria-checked': isSel?'true':'false',
+        onclick:()=>{
+          if(s.answered) return;
+          const pos = s.selectedMulti.indexOf(i);
+          if(pos>=0) s.selectedMulti.splice(pos,1); else s.selectedMulti.push(i);
+          render();
+        }},
+        el('span',{}, isSel?'☑':'☐'), ' ', opt
+      );
+      optWrap.appendChild(box);
+    });
+    if(!s.answered){
+      optWrap.appendChild(el('button',{class:'btn green', style:'margin-top:10px;', disabled: s.selectedMulti.length===0,
+        onclick:()=>submitAnswer()}, 'Submit Answer'));
+    }
+  } else {
+    q._options.forEach((opt,i)=>{
+      let cls='option-btn';
+      if(s.answered){
+        const isCorrectOpt = i===q._correctIndex;
+        const isChosen = i===s.selected;
+        if(isCorrectOpt) cls+=' correct';
+        else if(isChosen) cls+=' incorrect';
+      } else if(s.selected===i){
+        cls+=' selected';
+      }
+      optWrap.appendChild(el('button',{class:cls, disabled:s.answered,
+        onclick:()=>{ s.selected=i; render(); }},
+        String.fromCharCode(65+i)+'. '+opt
+      ));
+    });
+    if(!s.answered){
+      optWrap.appendChild(el('button',{class:'btn green', style:'margin-top:6px;', disabled: s.selected===null,
+        onclick:()=>submitAnswer()}, 'Submit Answer'));
+    }
+  }
+  wrap.appendChild(optWrap);
+
+  // Hint system (only before answering)
+  if(!s.answered){
+    const hints = buildHints(q);
+    wrap.appendChild(el('div',{},
+      el('button',{class:'btn ghost small', onclick:()=>{
+        s.hintsThisQ = Math.min(s.hintsThisQ+1, hints.length);
+        render();
+      }, disabled: s.hintsThisQ>=hints.length}, `💡 Hint (${s.hintsThisQ}/${hints.length} used)`)
+    ));
+    if(s.hintsThisQ>0){
+      const hbox = el('div',{class:'hint-box'});
+      for(let i=0;i<s.hintsThisQ;i++){
+        hbox.appendChild(el('div',{}, `Hint ${i+1}: ${hints[i]}`));
+      }
+      wrap.appendChild(hbox);
+    }
+  }
+
+  if(s.answered){
+    const correct = s.lastCorrect;
+    const fb = el('div',{class:'feedback-box '+(correct?'correct':'incorrect')});
+    fb.appendChild(el('div',{}, el('strong',{}, correct? '✅ Correct! ' : '❌ Not quite. ')));
+    fb.appendChild(el('div',{}, q.explanation));
+    if(s.hintsThisQ>0){
+      fb.appendChild(el('div',{style:'font-size:0.8rem;color:#666;margin-top:6px;'}, `(${s.hintsThisQ} hint${s.hintsThisQ>1?'s':''} used on this question)`));
+    }
+    wrap.appendChild(fb);
+    wrap.appendChild(el('div',{class:'nav-row'},
+      el('button',{class:'btn', onclick:()=>nextQuestion()}, s.idx+1<s.questions.length ? 'Next Question →' : 'See Results →')
+    ));
+  }
+
+  return wrap;
+}
+
+function buildHints(q){
+  const generic = [
+    "Reread the stimulus or question carefully — look for key words like 'most likely', 'best', or specific numbers/properties mentioned.",
+    "Think about the core rule: bigger particles drain faster but hold less water; smaller particles drain slower but hold more water.",
+    "Try eliminating any answer choices that describe sudden, instant, or extremely rare events — most soil and rock changes happen gradually."
+  ];
+  return generic;
+}
+
+function submitAnswer(){
+  const s = currentQuizSession;
+  const q = s.questions[s.idx];
+  let correct=false, chosenLabel='';
+  if(q.type==='multiselect'){
+    const chosen = [...s.selectedMulti].sort();
+    const want = [...q._correctIndices].sort();
+    correct = chosen.length===want.length && chosen.every((v,i)=>v===want[i]);
+    chosenLabel = s.selectedMulti.map(i=>q._options[i]).join(', ');
+  } else {
+    correct = s.selected===q._correctIndex;
+    chosenLabel = q._options[s.selected];
+  }
+  s.answered=true;
+  s.lastCorrect=correct;
+  if(correct) s.correctCount++;
+  recordAnswer(q, correct, chosenLabel, s.hintsThisQ);
+  render();
+}
+
+function nextQuestion(){
+  const s = currentQuizSession;
+  s.idx++;
+  s.answered=false; s.selected=null; s.selectedMulti=[]; s.hintsThisQ=0;
+  if(s.idx>=s.questions.length){
+    finishQuiz();
+  } else {
+    render();
+  }
+}
+
+function finishQuiz(){
+  const s = currentQuizSession;
+  const pct = Math.round((s.correctCount/s.questions.length)*100);
+  if(pct > STATE.setBest[s.setNum]) STATE.setBest[s.setNum]=pct;
+  STATE.setCompletions[s.setNum]++;
+  saveState();
+  currentQuizSession.finalPct = pct;
+  window.location.hash='report';
+}
+
+/* -------- REPORT SCREEN -------- */
+function buildReport(){
+  const s = currentQuizSession;
+  if(!s || s.finalPct===undefined){ window.location.hash='#home'; return el('div',{}); }
+  const band = masteryBand(s.finalPct);
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{}, `${SET_INFO[s.setNum].title} — Results`));
+  wrap.appendChild(el('div',{class:'flex-between'},
+    el('div',{class:'mastery-ring', style:`background:${band.color}`}, s.finalPct+'%'),
+    el('div',{}, el('h2',{style:`color:${band.color}`}, band.label), el('p',{}, `You got ${s.correctCount} out of ${s.questions.length} correct.`))
+  ));
+
+  // concept breakdown for this session
+  const conceptStats = {};
+  s.questions.forEach((q,i)=>{});
+  // recompute from mastery deltas isn't tracked per-session; use overall concept mastery instead
+  wrap.appendChild(el('h3',{},'Concept Mastery (All-Time)'));
+  const setConcepts = [...new Set(s.questions.map(q=>q.concept))];
+  setConcepts.forEach(cid=>{
+    const c = CONCEPTS.find(x=>x.id===cid);
+    const pct = conceptPct(cid);
+    wrap.appendChild(el('div',{style:'margin:8px 0;'},
+      el('div',{style:'display:flex;justify-content:space-between;font-size:0.85rem;'}, el('span',{},c.name), el('span',{},pct+'%')),
+      el('div',{class:'topicbar-outer'}, el('div',{class:'topicbar-inner', style:`width:${pct}%;background:${pct>=75?'#4caf50':pct>=50?'#f5c542':'#e57373'};`}))
+    ));
+  });
+
+  let motivational = '';
+  if(s.finalPct>=95) motivational = "🌟 Incredible! You're operating at Science Master level on this set!";
+  else if(s.finalPct>=85) motivational = "🎉 Milestone Ready! You really know your stuff here.";
+  else if(s.finalPct>=75) motivational = "👍 Strong Scientist! A little more practice and you'll hit full mastery.";
+  else if(s.finalPct>=60) motivational = "🌱 You're developing well — review the concepts below and try again.";
+  else motivational = "💪 Keep building your foundations — mistakes are part of learning. Let's review together!";
+  wrap.appendChild(el('p',{style:'font-weight:600;'}, motivational));
+
+  wrap.appendChild(el('div',{class:'nav-row'},
+    el('button',{class:'btn green', onclick:()=>startQuiz(s.setNum,false)}, '🔁 Retry This Quiz'),
+    el('button',{class:'btn secondary', onclick:()=>startQuiz(s.setNum,true)}, '🎯 Practice Missed Questions'),
+    el('button',{class:'btn purple', onclick:()=>{window.location.hash='#mistakes';}}, '📓 Review Mistake Notebook'),
+    el('button',{class:'btn ghost', onclick:()=>{window.location.hash='#home';}}, '🏠 Home')
+  ));
+
+  return wrap;
+}
+
+/* -------- DASHBOARD -------- */
+function buildDashboard(){
+  const wrap = el('div',{});
+  wrap.appendChild(el('div',{class:'card'},
+    el('h1',{},'📊 Mastery Dashboard'),
+    el('div',{class:'flex-between'},
+      el('div',{}, el('p',{}, el('strong',{},'Total Questions Answered: '), STATE.totalAttempts),
+        el('p',{}, el('strong',{},'Total Correct: '), STATE.totalCorrect),
+        el('p',{}, el('strong',{},'Current Streak: '), STATE.currentStreak),
+        el('p',{}, el('strong',{},'Best Streak: '), STATE.bestStreak),
+        el('p',{}, el('strong',{},'Hints Used: '), STATE.hintsUsed)
+      ),
+      el('div',{class:'mastery-ring', style:`background:${masteryBand(overallPct()).color};width:90px;height:90px;font-size:1.3rem;`}, overallPct()+'%')
+    )
+  ));
+
+  const cwrap = el('div',{class:'card'}, el('h2',{},'Mastery by Concept'));
+  CONCEPTS.forEach(c=>{
+    const pct = conceptPct(c.id);
+    const attempts = STATE.mastery[c.id].attempts;
+    cwrap.appendChild(el('div',{class:'concept-card', style:'margin:10px 0;'},
+      el('div',{style:'display:flex;justify-content:space-between;'}, el('strong',{},c.name), el('span',{},`${pct}% (${attempts} attempts)`)),
+      el('div',{class:'topicbar-outer', style:'margin-top:6px;'}, el('div',{class:'topicbar-inner', style:`width:${pct}%;background:${pct>=75?'#4caf50':pct>=50?'#f5c542':'#e57373'};`}))
+    ));
+  });
+  wrap.appendChild(cwrap);
+
+  const swrap = el('div',{class:'card'}, el('h2',{},'Quiz Set Completion'));
+  const sgrid = el('div',{class:'grid'});
+  for(let i=1;i<=7;i++){
+    sgrid.appendChild(el('div',{class:'concept-card'},
+      el('strong',{}, SET_INFO[i].title),
+      el('div',{}, `Best: ${STATE.setBest[i]}% · Completed ${STATE.setCompletions[i]}x`)
+    ));
+  }
+  swrap.appendChild(sgrid);
+  wrap.appendChild(swrap);
+
+  if(STATE.badges.length>0){
+    const bwrap = el('div',{class:'card'}, el('h2',{},'🏅 Badges Earned'));
+    const bdiv = el('div',{});
+    STATE.badges.forEach(bid=>{
+      const b = ALL_BADGES.find(x=>x.id===bid);
+      if(b) bdiv.appendChild(el('span',{class:'badge'}, '🏅 '+b.name));
+    });
+    bwrap.appendChild(bdiv);
+    wrap.appendChild(bwrap);
+  }
+
+  wrap.appendChild(el('div',{class:'card'},
+    el('button',{class:'btn ghost', onclick:()=>{
+      if(confirm('This will erase ALL your progress, scores, badges, and mistake history. Are you sure?')){
+        STATE = defaultState();
+        saveState();
+        render();
+      }
+    }}, '⚠️ Reset All Progress'),
+    el('button',{class:'btn', onclick:()=>{window.location.hash='#home';}}, '🏠 Back to Home')
+  ));
+
+  return wrap;
+}
+
+/* -------- MISTAKE NOTEBOOK -------- */
+function buildMistakes(){
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{},'📓 My Science Mistakes'));
+  if(STATE.mistakes.length===0){
+    wrap.appendChild(el('p',{}, "No mistakes recorded yet — nice work! Keep practicing to keep it that way. 🎉"));
+  } else {
+    wrap.appendChild(el('p',{}, `You have ${STATE.mistakes.length} recorded mistake(s) to review. Mistakes help you learn — let's fix them!`));
+    STATE.mistakes.slice(0,30).forEach(m=>{
+      wrap.appendChild(el('div',{class:'concept-card', style:'margin:10px 0;'},
+        el('div',{class:'conceptTag'}, CONCEPTS.find(c=>c.id===m.concept)?.name || m.concept),
+        el('p',{style:'margin:6px 0;'}, el('strong',{},'Question: '), m.questionSummary+'...'),
+        el('p',{style:'margin:4px 0;color:#c0392b;'}, el('strong',{},'Your answer: '), m.yourAnswer),
+        el('p',{style:'margin:4px 0;color:#2e7d32;'}, el('strong',{},'Correct answer: '), m.correctAnswer),
+        el('p',{style:'margin:4px 0;font-size:0.9rem;'}, m.explanation)
+      ));
+    });
+  }
+  wrap.appendChild(el('div',{class:'nav-row'},
+    el('button',{class:'btn green', onclick:()=>{
+      if(STATE.mistakes.length===0){ alert('No mistakes to practice — great job!'); return; }
+      // build a custom multi-set practice session from mistake ids
+      const ids = [...new Set(STATE.mistakes.map(m=>m.qid))];
+      const pool = QUESTIONS.filter(q=>ids.includes(q.id));
+      const questions = shuffle(pool).map(q=>{
+        if(q.type==='mc' || q.type==='tf'){
+          const idxArr = q.options.map((opt,i)=>({opt,i}));
+          const shuffled = shuffle(idxArr);
+          return {...q, _options: shuffled.map(x=>x.opt), _correctIndex: shuffled.findIndex(x=>x.i===q.correctIndex)};
+        } else if(q.type==='multiselect'){
+          const idxArr = q.options.map((opt,i)=>({opt,i}));
+          const shuffled = shuffle(idxArr);
+          const correctSet = new Set(q.correctIndices);
+          const newCorrect = shuffled.map((x,newI)=>correctSet.has(x.i)?newI:null).filter(x=>x!==null);
+          return {...q, _options: shuffled.map(x=>x.opt), _correctIndices: newCorrect};
+        }
+        return {...q, _options:q.options, _correctIndex:q.correctIndex};
+      });
+      currentQuizSession = {setNum:'Fix-My-Mistakes', questions, idx:0, correctCount:0, hintsThisQ:0, answered:false, selected:null, selectedMulti:[]};
+      window.location.hash='quiz';
+    }}, '🔧 Fix My Mistakes Practice Session'),
+    el('button',{class:'btn ghost', onclick:()=>{window.location.hash='#home';}}, '🏠 Home')
+  ));
+  return wrap;
+}
+
+/* -------- MINI LESSONS -------- */
+function buildLessons(){
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{},'💡 Mini Lessons'));
+  wrap.appendChild(el('p',{},'Quick refreshers on the most important concepts in Science Unit One.'));
+  MINI_LESSONS.forEach(l=>{
+    const pct = conceptPct(l.concept);
+    wrap.appendChild(el('div',{class:'concept-card', style:'margin:12px 0;'},
+      el('div',{class:'flex-between'}, el('h3',{style:'margin:0;'}, l.title), el('span',{class:'conceptTag'}, pct+'% mastery')),
+      el('p',{}, el('strong',{},'What it means: '), l.explanation),
+      el('p',{}, el('strong',{},'Key rule: '), l.rule),
+      el('p',{}, el('strong',{},'Example: '), l.example),
+      el('p',{}, el('strong',{},'Common mistake: '), l.mistake),
+      el('p',{style:'font-style:italic;'}, el('strong',{},'Quick check: '), l.check)
+    ));
+  });
+  wrap.appendChild(el('button',{class:'btn', onclick:()=>{window.location.hash='#home';}}, '🏠 Home'));
+  return wrap;
+}
+
+/* -------- INTERACTIVE LABS -------- */
+function buildLabsHome(){
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{},'🧪 Interactive Labs'));
+  wrap.appendChild(el('p',{},'Try these mini virtual investigations to build intuition before your quizzes!'));
+  const grid = el('div',{class:'grid'});
+  const labs = [
+    {id:'drainage', title:'💧 Water Drainage Lab', desc:'Predict and watch how water moves through different soils.'},
+    {id:'detective', title:'🔍 Soil Detective Lab', desc:'Examine clues and identify a mystery soil sample.'},
+    {id:'river', title:'🪨 River Rock Lab', desc:'Watch how moving water changes a rock over simulated time.'},
+    {id:'buildsoil', title:'🌱 Build the Best Soil', desc:'Mix soil properties to grow the healthiest plant.'}
+  ];
+  labs.forEach(l=>{
+    grid.appendChild(el('div',{class:'concept-card'},
+      el('h3',{}, l.title), el('p',{}, l.desc),
+      el('button',{class:'btn secondary', onclick:()=>{window.location.hash='lab-'+l.id;}}, 'Start Lab')
+    ));
+  });
+  wrap.appendChild(grid);
+  wrap.appendChild(el('button',{class:'btn ghost', style:'margin-top:10px;', onclick:()=>{window.location.hash='#home';}}, '🏠 Home'));
+  return wrap;
+}
+
+function buildLab(labId){
+  if(labId==='drainage') return buildDrainageLab();
+  if(labId==='detective') return buildDetectiveLab();
+  if(labId==='river') return buildRiverLab();
+  if(labId==='buildsoil') return buildSoilBuilderLab();
+  const wrap = el('div',{class:'card'}, el('p',{},'Lab not found.'), el('button',{class:'btn', onclick:()=>{window.location.hash='#labs';}}, 'Back'));
+  return wrap;
+}
+
+/* --- Drainage Lab --- */
+let drainageLabState = {prediction:null, running:false, results:null};
+function buildDrainageLab(){
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{},'💧 Water Drainage Lab'));
+  wrap.appendChild(el('p',{},'Predict which soil will drain the fastest: Sand, Loam, or Clay.'));
+
+  if(!drainageLabState.prediction){
+    const opts = el('div',{});
+    ['Sand','Loam','Clay'].forEach(opt=>{
+      opts.appendChild(el('button',{class:'option-btn', onclick:()=>{drainageLabState.prediction=opt; render();}}, opt));
+    });
+    wrap.appendChild(opts);
+  } else if(!drainageLabState.results){
+    wrap.appendChild(el('p',{}, `Your prediction: `, el('strong',{},drainageLabState.prediction)));
+    wrap.appendChild(el('div',{class:'lab-canvas-wrap'},
+      el('p',{}, '🧪 Ready to pour equal water into three tubes: Sand, Loam, and Clay.'),
+      el('button',{class:'btn green', onclick:()=>{
+        drainageLabState.results = {Sand: 9, Loam: 5, Clay: 1}; // seconds-ish relative speed, illustrative
+        render();
+      }}, '▶ Run Experiment')
+    ));
+  } else {
+    const r = drainageLabState.results;
+    wrap.appendChild(el('h3',{},'Results (relative drainage speed):'));
+    Object.entries(r).forEach(([soil,speed])=>{
+      wrap.appendChild(el('div',{style:'margin:8px 0;'},
+        el('div',{}, `${soil}: `, el('strong',{},speed+'/10 speed')),
+        el('div',{class:'topicbar-outer'}, el('div',{class:'topicbar-inner', style:`width:${speed*10}%;background:#4dd0e1;`}))
+      ));
+    });
+    const fastest = Object.entries(r).sort((a,b)=>b[1]-a[1])[0][0];
+    const correct = drainageLabState.prediction===fastest;
+    wrap.appendChild(el('div',{class:'feedback-box '+(correct?'correct':'incorrect')},
+      correct ? `✅ Great prediction! ${fastest} drains fastest because its large particles create big air spaces.` :
+                `You predicted ${drainageLabState.prediction}, but ${fastest} actually drained fastest. Large particles (like sand) create big air spaces that let water pass through quickly!`
+    ));
+    wrap.appendChild(el('button',{class:'btn secondary', onclick:()=>{drainageLabState={prediction:null,running:false,results:null}; render();}}, '🔁 Try Again'));
+  }
+  wrap.appendChild(el('button',{class:'btn ghost', style:'margin-top:10px;', onclick:()=>{window.location.hash='#labs';}}, '← Back to Labs'));
+  return wrap;
+}
+
+/* --- Soil Detective Lab --- */
+const DETECTIVE_SAMPLES = [
+  {name:'Sample A', color:'Tan', grain:'Large', holds:'No', drains:'Yes', answer:'Sand'},
+  {name:'Sample B', color:'Tan', grain:'Microscopic', holds:'Yes', drains:'No', answer:'Clay'},
+  {name:'Sample C', color:'Gray', grain:'Very Large', holds:'No', drains:'Yes', answer:'Gravel'},
+  {name:'Sample D', color:'Dark Brown', grain:'Medium', holds:'Yes', drains:'Yes', answer:'Topsoil'}
+];
+let detectiveLabState = {sampleIdx:0, guess:null, revealed:false};
+function buildDetectiveLab(){
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{},'🔍 Soil Detective Lab'));
+  const sample = DETECTIVE_SAMPLES[detectiveLabState.sampleIdx];
+  wrap.appendChild(el('div',{class:'qstim'},
+    el('strong',{}, sample.name+' Clues:'),
+    el('ul',{},
+      el('li',{}, 'Color: '+sample.color),
+      el('li',{}, 'Grain size: '+sample.grain),
+      el('li',{}, 'Holds water: '+sample.holds),
+      el('li',{}, 'Drains water: '+sample.drains)
+    )
+  ));
+  if(!detectiveLabState.revealed){
+    const opts = el('div',{});
+    ['Sand','Clay','Gravel','Silt','Topsoil'].forEach(opt=>{
+      opts.appendChild(el('button',{class:'option-btn'+(detectiveLabState.guess===opt?' selected':''), onclick:()=>{detectiveLabState.guess=opt; render();}}, opt));
+    });
+    wrap.appendChild(opts);
+    wrap.appendChild(el('button',{class:'btn green', disabled:!detectiveLabState.guess, onclick:()=>{detectiveLabState.revealed=true; render();}}, 'Reveal Answer'));
+  } else {
+    const correct = detectiveLabState.guess===sample.answer;
+    wrap.appendChild(el('div',{class:'feedback-box '+(correct?'correct':'incorrect')},
+      correct ? `✅ Correct! ${sample.name} is ${sample.answer}.` : `Not quite — ${sample.name} is actually ${sample.answer}. Look at how all four clues (color, grain size, holds water, drains) match together!`
+    ));
+    wrap.appendChild(el('button',{class:'btn secondary', onclick:()=>{
+      detectiveLabState = {sampleIdx:(detectiveLabState.sampleIdx+1)%DETECTIVE_SAMPLES.length, guess:null, revealed:false};
+      render();
+    }}, 'Next Sample →'));
+  }
+  wrap.appendChild(el('button',{class:'btn ghost', style:'margin-top:10px;', onclick:()=>{window.location.hash='#labs';}}, '← Back to Labs'));
+  return wrap;
+}
+
+/* --- River Rock Lab --- */
+let riverLabState = {years:0};
+function buildRiverLab(){
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{},'🪨 River Rock Lab'));
+  wrap.appendChild(el('p',{},'Move the slider forward in time to see how a rock changes as moving water erodes it.'));
+  const years = riverLabState.years;
+  const roundedness = Math.min(years/100, 1);
+  // Simple SVG rock that gets more rounded
+  const svgNS = "http://www.w3.org/2000/svg";
+  const rx = 40 + roundedness*30;
+  const ry = 30 + roundedness*20;
+  const svgHtml = `<svg width="200" height="150" viewBox="0 0 200 150">
+    <ellipse cx="100" cy="90" rx="${rx}" ry="${ry}" fill="#8d6e63" stroke="#5d4037" stroke-width="${4-roundedness*3}" />
+    <text x="100" y="140" text-anchor="middle" font-size="12" fill="#333">Year ${years}</text>
+  </svg>`;
+  wrap.appendChild(el('div',{class:'lab-canvas-wrap', html: svgHtml}));
+  wrap.appendChild(el('input',{type:'range', min:'0', max:'200', step:'10', value:String(years), style:'width:100%;',
+    oninput:(e)=>{ riverLabState.years=parseInt(e.target.value); render(); }
+  }));
+  wrap.appendChild(el('p',{}, `Years passed: ${years}. `, years<50 ? "The rock still looks fairly jagged." : years<150 ? "The rock is becoming noticeably smoother and rounder." : "The rock is now very smooth and rounded from years of water erosion!"));
+  wrap.appendChild(el('button',{class:'btn ghost', style:'margin-top:10px;', onclick:()=>{window.location.hash='#labs';}}, '← Back to Labs'));
+  return wrap;
+}
+
+/* --- Build the Best Soil Lab --- */
+let soilBuilderState = {sand:33, silt:33, clay:34};
+function buildSoilBuilderLab(){
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{},'🌱 Build the Best Soil'));
+  wrap.appendChild(el('p',{},'Adjust the sliders to build a soil mixture that best supports plant growth! (Percentages should total 100%)'));
+
+  ['sand','silt','clay'].forEach(type=>{
+    wrap.appendChild(el('div',{style:'margin:10px 0;'},
+      el('label',{}, `${type.charAt(0).toUpperCase()+type.slice(1)}: ${soilBuilderState[type]}%`),
+      el('input',{type:'range', min:'0', max:'100', value:String(soilBuilderState[type]),
+        oninput:(e)=>{ soilBuilderState[type]=parseInt(e.target.value); render(); }, style:'width:100%;'})
+    ));
+  });
+  const total = soilBuilderState.sand+soilBuilderState.silt+soilBuilderState.clay;
+  wrap.appendChild(el('p',{}, `Total: ${total}%`, total!==100 ? ' ⚠️ Try to make this equal 100%!' : ' ✅ '));
+
+  if(total===100){
+    // score based on closeness to ideal loam (40/40/20)
+    const dist = Math.abs(soilBuilderState.sand-40)+Math.abs(soilBuilderState.silt-40)+Math.abs(soilBuilderState.clay-20);
+    const healthScore = Math.max(0, 100-dist);
+    wrap.appendChild(el('div',{class:'lab-canvas-wrap'},
+      el('p',{}, `Plant Health Score: `, el('strong',{},healthScore+'%')),
+      el('div',{class:'topicbar-outer'}, el('div',{class:'topicbar-inner', style:`width:${healthScore}%;background:${healthScore>=75?'#4caf50':healthScore>=50?'#f5c542':'#e57373'};`})),
+      el('p',{style:'font-size:0.85rem;margin-top:8px;'}, healthScore>=85 ? "🌟 Excellent! This mix is very close to ideal loam (about 40% sand, 40% silt, 20% clay)." :
+        healthScore>=60 ? "👍 Pretty good! Try nudging closer to a loam-like balance for even healthier plants." :
+        "🌱 This mix may struggle — remember, loam (a balance of sand, silt, and clay) generally supports plants best.")
+    ));
+  }
+
+  wrap.appendChild(el('button',{class:'btn ghost', style:'margin-top:10px;', onclick:()=>{window.location.hash='#labs';}}, '← Back to Labs'));
+  return wrap;
+}
+
+/* -------- PARENT/TEACHER VIEW -------- */
+function buildParentView(){
+  const wrap = el('div',{class:'card'});
+  wrap.appendChild(el('h1',{},'👪 Parent / Teacher Progress Summary'));
+  wrap.appendChild(el('p',{}, `Overall Mastery: ${overallPct()}% (${masteryBand(overallPct()).label})`));
+  wrap.appendChild(el('h3',{},'Quiz Set Scores'));
+  const tbl = el('table',{class:'datatable'});
+  tbl.appendChild(el('tr',{}, el('th',{},'Set'), el('th',{},'Best Score'), el('th',{},'Times Completed')));
+  for(let i=1;i<=7;i++){
+    tbl.appendChild(el('tr',{}, el('td',{},SET_INFO[i].title), el('td',{},STATE.setBest[i]+'%'), el('td',{},STATE.setCompletions[i])));
+  }
+  wrap.appendChild(tbl);
+
+  wrap.appendChild(el('h3',{},'Concept Mastery'));
+  const tbl2 = el('table',{class:'datatable'});
+  tbl2.appendChild(el('tr',{}, el('th',{},'Concept'), el('th',{},'Mastery %'), el('th',{},'Attempts')));
+  CONCEPTS.forEach(c=>{
+    tbl2.appendChild(el('tr',{}, el('td',{},c.name), el('td',{},conceptPct(c.id)+'%'), el('td',{},STATE.mastery[c.id].attempts)));
+  });
+  wrap.appendChild(tbl2);
+
+  const weak = CONCEPTS.filter(c=>STATE.mastery[c.id].attempts>0 && conceptPct(c.id)<70).map(c=>c.name);
+  wrap.appendChild(el('h3',{},'Concepts Needing More Practice'));
+  wrap.appendChild(el('p',{}, weak.length>0 ? weak.join(', ') : 'None currently — great progress across all attempted concepts!'));
+
+  wrap.appendChild(el('p',{class:'warn-note'}, 'Note: Practice questions in this app are modeled on the style and reasoning demands typical of Grade 3 Georgia science assessments and are not official Georgia Milestones test items.'));
+  wrap.appendChild(el('button',{class:'btn ghost', style:'margin-top:10px;', onclick:()=>window.print()}, '🖨️ Print Summary'));
+  wrap.appendChild(el('button',{class:'btn', onclick:()=>{window.location.hash='#home';}}, '🏠 Home'));
+  return wrap;
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+render();
+
+})();
+</script>
+</body>
+</html>
