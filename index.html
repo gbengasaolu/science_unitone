@@ -110,6 +110,9 @@
   }
   .msel-box{display:flex;align-items:center;gap:8px;padding:10px;border:2px solid #ccd7db;border-radius:10px;margin:6px 0;cursor:pointer;}
   .msel-box.selected{border-color:var(--purple);background:#f1ecfb;}
+  .msel-box.correct{border-color:var(--green);background:#e8f7ea;font-weight:700;}
+  .msel-box.incorrect{border-color:var(--red);background:#fdecec;font-weight:700;}
+  .msel-box[aria-disabled="true"]{cursor:default;}
   footer.appfoot{text-align:center;color:#cfe0e6;font-size:0.75rem;margin-top:20px;}
   .flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
   .lab-canvas-wrap{background:#eef5f7;border-radius:10px;padding:10px;text-align:center;}
@@ -879,10 +882,11 @@ QUESTIONS.push(
  correctIndex:1,
  explanation:"By comparing how much water drains through each cup in the same time, the investigation is testing drainage speed of sand vs. clay."},
 {id:nq(),set:5,concept:'investigation',difficulty:'hard',type:'mc',
- stimulus:"In the cup investigation above (sand vs. clay drainage test), which of these is a variable that was correctly KEPT THE SAME between the two cups?",
+ stimulus:"Two identical cups are used for a drainage test. One cup contains sand and the other contains clay. Students pour the same amount of water into each cup at the same time and measure how much drains out after 2 minutes.",
+ prompt:"Which variable was correctly KEPT THE SAME between the two cups?",
  options:["The type of soil used","The amount of water poured in","The color of the soil","The particle size"],
  correctIndex:1,
- explanation:"The amount of water poured into each cup was kept the same, making it a fair test — only the soil type (the variable being tested) was different."},
+ explanation:"The amount of water poured into each cup was kept the same, making it a fair test. Soil type was intentionally changed to compare drainage."},
 {id:nq(),set:5,concept:'evidenceReasoning',difficulty:'hard',type:'mc',
  stimulus:"A student says, 'I only tested one sample of clay soil, so I know for certain that ALL clay soil everywhere behaves the exact same way.'",
  prompt:"What is the issue with this reasoning?",
@@ -1327,11 +1331,26 @@ let currentQuizSession = null; // {setNum, questions:[], idx, answers:[], hintsT
 
 function el(tag, props, ...children){
   const e = document.createElement(tag);
+
+  // Buttons inside a static single-page app should never behave like form-submit
+  // buttons if this file is later embedded inside a form or LMS wrapper.
+  if(tag.toLowerCase()==='button') e.type='button';
+
   if(props) Object.entries(props).forEach(([k,v])=>{
     if(k==='class') e.className=v;
     else if(k==='html') e.innerHTML=v;
     else if(k.startsWith('on') && typeof v==='function') e.addEventListener(k.slice(2), v);
-    else if(v!==null && v!==undefined) e.setAttribute(k,v);
+
+    // IMPORTANT: Boolean HTML attributes are true by their mere presence.
+    // setAttribute('disabled', false) still creates disabled="false", which
+    // leaves the control disabled. Assign boolean DOM properties instead.
+    else if(k==='disabled') e.disabled=Boolean(v);
+    else if(k==='checked') e.checked=Boolean(v);
+    else if(k==='selected') e.selected=Boolean(v);
+    else if(k==='required') e.required=Boolean(v);
+    else if(k==='readonly') e.readOnly=Boolean(v);
+
+    else if(v!==null && v!==undefined && v!==false) e.setAttribute(k,String(v));
   });
   children.flat().forEach(c=>{
     if(c===null||c===undefined) return;
@@ -1513,7 +1532,55 @@ function startQuiz(setNum, missedOnly){
     answered:false, selected:null, selectedMulti:[], reveal:false,
     log:[]
   };
-  window.location.hash='quiz';
+  window.location.hash='#quiz';
+}
+
+function prepareQuestionForSession(q){
+  if(q.type==='mc' || q.type==='tf'){
+    const idxArr = q.options.map((opt,i)=>({opt,i}));
+    const shuffled = shuffle(idxArr);
+    return {...q, _options: shuffled.map(x=>x.opt), _correctIndex: shuffled.findIndex(x=>x.i===q.correctIndex)};
+  }
+  if(q.type==='multiselect'){
+    const idxArr = q.options.map((opt,i)=>({opt,i}));
+    const shuffled = shuffle(idxArr);
+    const correctSet = new Set(q.correctIndices);
+    const newCorrect = shuffled
+      .map((x,newI)=>correctSet.has(x.i)?newI:null)
+      .filter(x=>x!==null);
+    return {...q, _options: shuffled.map(x=>x.opt), _correctIndices: newCorrect};
+  }
+  return {...q, _options:[...(q.options||[])], _correctIndex:q.correctIndex};
+}
+
+function startMistakePractice(){
+  if(STATE.mistakes.length===0){
+    alert('No mistakes to practice — great job!');
+    return;
+  }
+
+  const ids = [...new Set(STATE.mistakes.map(m=>m.qid))];
+  const pool = QUESTIONS.filter(q=>ids.includes(q.id));
+
+  if(pool.length===0){
+    alert('No saved mistake questions are available in this version of the quiz.');
+    return;
+  }
+
+  currentQuizSession = {
+    setNum:'mistakes',
+    sessionTitle:'Fix My Mistakes Practice',
+    questions:shuffle(pool).map(prepareQuestionForSession),
+    idx:0,
+    correctCount:0,
+    hintsThisQ:0,
+    answered:false,
+    selected:null,
+    selectedMulti:[],
+    reveal:false,
+    log:[]
+  };
+  window.location.hash='#quiz';
 }
 
 /* -------- QUIZ SCREEN -------- */
@@ -1549,22 +1616,51 @@ function buildQuizScreen(){
 
   const optWrap = el('div',{});
   if(q.type==='multiselect'){
+    const toggleMulti = (i)=>{
+      if(s.answered) return;
+      const pos = s.selectedMulti.indexOf(i);
+      if(pos>=0) s.selectedMulti.splice(pos,1);
+      else s.selectedMulti.push(i);
+      render();
+    };
+
     q._options.forEach((opt,i)=>{
       const isSel = s.selectedMulti.includes(i);
-      const box = el('div',{class:'msel-box'+(isSel?' selected':''), tabindex:'0', role:'checkbox', 'aria-checked': isSel?'true':'false',
-        onclick:()=>{
-          if(s.answered) return;
-          const pos = s.selectedMulti.indexOf(i);
-          if(pos>=0) s.selectedMulti.splice(pos,1); else s.selectedMulti.push(i);
-          render();
-        }},
+      const isCorrectOpt = Array.isArray(q._correctIndices) && q._correctIndices.includes(i);
+      let cls='msel-box';
+      if(s.answered){
+        if(isCorrectOpt) cls+=' correct';
+        else if(isSel) cls+=' incorrect';
+      } else if(isSel){
+        cls+=' selected';
+      }
+
+      const box = el('div',{
+        class:cls,
+        tabindex:s.answered?'-1':'0',
+        role:'checkbox',
+        'aria-checked':isSel?'true':'false',
+        'aria-disabled':s.answered?'true':'false',
+        onclick:()=>toggleMulti(i),
+        onkeydown:(e)=>{
+          if((e.key==='Enter' || e.key===' ') && !s.answered){
+            e.preventDefault();
+            toggleMulti(i);
+          }
+        }
+      },
         el('span',{}, isSel?'☑':'☐'), ' ', opt
       );
       optWrap.appendChild(box);
     });
+
     if(!s.answered){
-      optWrap.appendChild(el('button',{class:'btn green', style:'margin-top:10px;', disabled: s.selectedMulti.length===0,
-        onclick:()=>submitAnswer()}, 'Submit Answer'));
+      optWrap.appendChild(el('button',{
+        class:'btn green',
+        style:'margin-top:10px;',
+        disabled:s.selectedMulti.length===0,
+        onclick:submitAnswer
+      }, 'Submit Answer'));
     }
   } else {
     q._options.forEach((opt,i)=>{
@@ -1578,13 +1674,13 @@ function buildQuizScreen(){
         cls+=' selected';
       }
       optWrap.appendChild(el('button',{class:cls, disabled:s.answered,
-        onclick:()=>{ s.selected=i; render(); }},
+        onclick:()=>{ if(!s.answered){ s.selected=i; render(); } }},
         String.fromCharCode(65+i)+'. '+opt
       ));
     });
     if(!s.answered){
       optWrap.appendChild(el('button',{class:'btn green', style:'margin-top:6px;', disabled: s.selected===null,
-        onclick:()=>submitAnswer()}, 'Submit Answer'));
+        onclick:submitAnswer}, 'Submit Answer'));
     }
   }
   wrap.appendChild(optWrap);
@@ -1635,20 +1731,33 @@ function buildHints(q){
 
 function submitAnswer(){
   const s = currentQuizSession;
+  if(!s || s.answered) return;
+
   const q = s.questions[s.idx];
-  let correct=false, chosenLabel='';
+  if(!q) return;
+
+  let correct=false;
+  let chosenLabel='';
+
   if(q.type==='multiselect'){
-    const chosen = [...s.selectedMulti].sort();
-    const want = [...q._correctIndices].sort();
+    if(!Array.isArray(s.selectedMulti) || s.selectedMulti.length===0) return;
+
+    const chosen = [...s.selectedMulti].sort((a,b)=>a-b);
+    const want = [...q._correctIndices].sort((a,b)=>a-b);
     correct = chosen.length===want.length && chosen.every((v,i)=>v===want[i]);
-    chosenLabel = s.selectedMulti.map(i=>q._options[i]).join(', ');
+    chosenLabel = chosen.map(i=>q._options[i]).join(', ');
   } else {
+    if(s.selected===null || s.selected===undefined) return;
+
     correct = s.selected===q._correctIndex;
     chosenLabel = q._options[s.selected];
   }
+
+  // Lock immediately so a rapid double-click cannot record the same question twice.
   s.answered=true;
   s.lastCorrect=correct;
   if(correct) s.correctCount++;
+
   recordAnswer(q, correct, chosenLabel, s.hintsThisQ);
   render();
 }
@@ -1666,12 +1775,26 @@ function nextQuestion(){
 
 function finishQuiz(){
   const s = currentQuizSession;
+  if(!s || !Array.isArray(s.questions) || s.questions.length===0){
+    window.location.hash='#home';
+    return;
+  }
+
   const pct = Math.round((s.correctCount/s.questions.length)*100);
-  if(pct > STATE.setBest[s.setNum]) STATE.setBest[s.setNum]=pct;
-  STATE.setCompletions[s.setNum]++;
+  const isStandardSet = Number.isInteger(s.setNum) && Boolean(SET_INFO[s.setNum]);
+
+  // Only numbered quiz sets belong in the set-best / completion summary.
+  // Custom mistake-practice sessions still update concept mastery question by question,
+  // but must not create invalid keys or NaN completion counts.
+  if(isStandardSet){
+    if(pct > STATE.setBest[s.setNum]) STATE.setBest[s.setNum]=pct;
+    STATE.setCompletions[s.setNum]++;
+  }
+
   saveState();
-  currentQuizSession.finalPct = pct;
-  window.location.hash='report';
+  s.finalPct = pct;
+  s.isStandardSet = isStandardSet;
+  window.location.hash='#report';
 }
 
 /* -------- REPORT SCREEN -------- */
@@ -1680,7 +1803,10 @@ function buildReport(){
   if(!s || s.finalPct===undefined){ window.location.hash='#home'; return el('div',{}); }
   const band = masteryBand(s.finalPct);
   const wrap = el('div',{class:'card'});
-  wrap.appendChild(el('h1',{}, `${SET_INFO[s.setNum].title} — Results`));
+  const reportTitle = (Number.isInteger(s.setNum) && SET_INFO[s.setNum])
+    ? SET_INFO[s.setNum].title
+    : (s.sessionTitle || 'Practice Session');
+  wrap.appendChild(el('h1',{}, `${reportTitle} — Results`));
   wrap.appendChild(el('div',{class:'flex-between'},
     el('div',{class:'mastery-ring', style:`background:${band.color}`}, s.finalPct+'%'),
     el('div',{}, el('h2',{style:`color:${band.color}`}, band.label), el('p',{}, `You got ${s.correctCount} out of ${s.questions.length} correct.`))
@@ -1709,12 +1835,16 @@ function buildReport(){
   else motivational = "💪 Keep building your foundations — mistakes are part of learning. Let's review together!";
   wrap.appendChild(el('p',{style:'font-weight:600;'}, motivational));
 
-  wrap.appendChild(el('div',{class:'nav-row'},
-    el('button',{class:'btn green', onclick:()=>startQuiz(s.setNum,false)}, '🔁 Retry This Quiz'),
-    el('button',{class:'btn secondary', onclick:()=>startQuiz(s.setNum,true)}, '🎯 Practice Missed Questions'),
-    el('button',{class:'btn purple', onclick:()=>{window.location.hash='#mistakes';}}, '📓 Review Mistake Notebook'),
-    el('button',{class:'btn ghost', onclick:()=>{window.location.hash='#home';}}, '🏠 Home')
-  ));
+  const resultNav = el('div',{class:'nav-row'});
+  if(Number.isInteger(s.setNum) && SET_INFO[s.setNum]){
+    resultNav.appendChild(el('button',{class:'btn green', onclick:()=>startQuiz(s.setNum,false)}, '🔁 Retry This Quiz'));
+    resultNav.appendChild(el('button',{class:'btn secondary', onclick:()=>startQuiz(s.setNum,true)}, '🎯 Practice Missed Questions'));
+  } else {
+    resultNav.appendChild(el('button',{class:'btn green', onclick:startMistakePractice}, '🔁 Practice Mistakes Again'));
+  }
+  resultNav.appendChild(el('button',{class:'btn purple', onclick:()=>{window.location.hash='#mistakes';}}, '📓 Review Mistake Notebook'));
+  resultNav.appendChild(el('button',{class:'btn ghost', onclick:()=>{window.location.hash='#home';}}, '🏠 Home'));
+  wrap.appendChild(resultNav);
 
   return wrap;
 }
@@ -1801,28 +1931,7 @@ function buildMistakes(){
     });
   }
   wrap.appendChild(el('div',{class:'nav-row'},
-    el('button',{class:'btn green', onclick:()=>{
-      if(STATE.mistakes.length===0){ alert('No mistakes to practice — great job!'); return; }
-      // build a custom multi-set practice session from mistake ids
-      const ids = [...new Set(STATE.mistakes.map(m=>m.qid))];
-      const pool = QUESTIONS.filter(q=>ids.includes(q.id));
-      const questions = shuffle(pool).map(q=>{
-        if(q.type==='mc' || q.type==='tf'){
-          const idxArr = q.options.map((opt,i)=>({opt,i}));
-          const shuffled = shuffle(idxArr);
-          return {...q, _options: shuffled.map(x=>x.opt), _correctIndex: shuffled.findIndex(x=>x.i===q.correctIndex)};
-        } else if(q.type==='multiselect'){
-          const idxArr = q.options.map((opt,i)=>({opt,i}));
-          const shuffled = shuffle(idxArr);
-          const correctSet = new Set(q.correctIndices);
-          const newCorrect = shuffled.map((x,newI)=>correctSet.has(x.i)?newI:null).filter(x=>x!==null);
-          return {...q, _options: shuffled.map(x=>x.opt), _correctIndices: newCorrect};
-        }
-        return {...q, _options:q.options, _correctIndex:q.correctIndex};
-      });
-      currentQuizSession = {setNum:'Fix-My-Mistakes', questions, idx:0, correctCount:0, hintsThisQ:0, answered:false, selected:null, selectedMulti:[]};
-      window.location.hash='quiz';
-    }}, '🔧 Fix My Mistakes Practice Session'),
+    el('button',{class:'btn green', onclick:startMistakePractice}, '🔧 Fix My Mistakes Practice Session'),
     el('button',{class:'btn ghost', onclick:()=>{window.location.hash='#home';}}, '🏠 Home')
   ));
   return wrap;
