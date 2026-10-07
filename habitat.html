@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Georgia Habitats Mastery Lab | Grade 3 Science</title>
+<style>
+:root{
+  --ink:#17324d; --muted:#60758a; --paper:#f6fbff; --card:#ffffff;
+  --navy:#0b3b5e; --blue:#177ddc; --teal:#0f9d8b; --green:#2b9348;
+  --lime:#8ac926; --gold:#f4b942; --orange:#f77f00; --red:#d1495b;
+  --purple:#7451b8; --line:#dce9f3; --shadow:0 12px 34px rgba(20,55,82,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  color:var(--ink); background:
+  radial-gradient(circle at 15% 10%, rgba(23,125,220,.12), transparent 28%),
+  radial-gradient(circle at 88% 18%, rgba(15,157,139,.10), transparent 30%),
+  linear-gradient(180deg,#eff8ff 0%,#f8fcff 42%,#eef8f5 100%);
+  min-height:100vh;
+}
+button,input{font:inherit}
+button{touch-action:manipulation}
+a{color:var(--blue)}
+.shell{max-width:1120px;margin:auto;padding:0 18px 64px}
+.top{
+  margin:0 -18px 22px; padding:18px 18px 16px; color:white;
+  background:linear-gradient(115deg,#082e49,#0e5d75 55%,#0f7c72);
+  box-shadow:0 8px 28px rgba(0,40,70,.22);
+}
+.top-inner{max-width:1120px;margin:auto;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.brandmark{
+  width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#fff,#dff7f1); color:#0b5b57; font-weight:900; font-size:24px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.7),0 8px 18px rgba(0,0,0,.18)
+}
+.brand h1{font-size:1.16rem;margin:0 0 2px}
+.brand p{margin:0;font-size:.84rem;opacity:.84}
+.topstats{display:flex;gap:8px;flex-wrap:wrap}
+.pill{padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);font-size:.8rem;font-weight:750}
+.hero{
+  border-radius:24px; overflow:hidden; background:linear-gradient(135deg,#ffffff,#f8fcff);
+  box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.9); margin-bottom:18px;
+}
+.hero-grid{display:grid;grid-template-columns:1.5fr .8fr}
+.hero-copy{padding:30px 30px 28px}
+.kicker{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:900;margin-bottom:8px}
+.hero h2{font-size:clamp(1.9rem,5vw,3.4rem);line-height:1.02;margin:0 0 12px;letter-spacing:-.04em;color:#0d3552}
+.hero p{font-size:1.02rem;line-height:1.65;color:var(--muted);max-width:720px;margin:0}
+.hero-side{
+  padding:24px; display:flex;flex-direction:column;justify-content:center;gap:10px;
+  background:linear-gradient(160deg,#0f7c72,#0b5a7a);
+}
+.goal-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:white;border-radius:18px;padding:18px}
+.goal-card strong{font-size:2rem;display:block;line-height:1}
+.goal-card span{font-size:.82rem;opacity:.9}
+.goal-note{font-size:.8rem;color:#e7ffff;line-height:1.45}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 20px}
+.nav button{
+  border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:12px;
+  padding:10px 13px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(15,55,85,.06)
+}
+.nav button.active,.nav button:hover{background:#0d5c78;color:#fff;border-color:#0d5c78}
+.view{display:none}.view.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.card{background:var(--card);border:1px solid #e4eef6;border-radius:20px;padding:20px;box-shadow:0 8px 24px rgba(32,72,104,.07)}
+.card h3{margin:0 0 8px;font-size:1.05rem}
+.card p{color:var(--muted);line-height:1.55;margin:6px 0}
+.span-4{grid-column:span 4}.span-6{grid-column:span 6}.span-8{grid-column:span 8}.span-12{grid-column:span 12}
+.day{
+  position:relative;overflow:hidden
+}
+.day:before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:linear-gradient(var(--teal),var(--blue))}
+.day .num{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:#e9f9f5;color:#08736a;font-size:1.2rem;font-weight:900}
+.tasks{margin:11px 0 0;padding-left:20px;color:#38536b}
+.tasks li{margin:7px 0;line-height:1.42}
+.metric{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.ring{
+  --p:0; width:90px;height:90px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+  background:conic-gradient(var(--teal) calc(var(--p)*1%),#e3eef3 0);
+  position:relative
+}
+.ring:after{content:"";position:absolute;width:69px;height:69px;border-radius:50%;background:white}
+.ring b{position:relative;z-index:1;font-size:1.08rem}
+.progress{height:10px;border-radius:99px;background:#e7eef4;overflow:hidden;margin-top:9px}
+.progress>span{height:100%;display:block;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:inherit;transition:.35s}
+.btn{
+  appearance:none;border:0;border-radius:13px;padding:11px 15px;cursor:pointer;font-weight:850;
+  background:#0c6680;color:white;box-shadow:0 6px 14px rgba(12,102,128,.18)
+}
+.btn:hover{transform:translateY(-1px)}
+.btn.secondary{background:#eef6fa;color:#134662;box-shadow:none;border:1px solid #d8e6ef}
+.btn.gold{background:var(--gold);color:#4a3500}
+.btn.green{background:var(--green)}
+.btn.red{background:#fff0f2;color:#9d2537;box-shadow:none;border:1px solid #f1c6cd}
+.btn:disabled{opacity:.5;cursor:default;transform:none}
+.section-title{margin:6px 0 14px}
+.section-title h2{margin:0 0 5px;font-size:1.55rem}
+.section-title p{margin:0;color:var(--muted)}
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px}
+.lesson{
+  background:white;border:1px solid var(--line);border-radius:18px;padding:17px;position:relative;overflow:hidden
+}
+.lesson .tag{font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+.lesson h3{font-size:1.02rem;margin:6px 0}
+.lesson p{font-size:.89rem;line-height:1.48;color:#526c80}
+.rule{margin-top:10px;background:#f0f8ff;border-left:4px solid var(--blue);padding:9px 10px;border-radius:8px;font-size:.85rem;font-weight:750;line-height:1.4}
+.habitat-table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:15px;font-size:.87rem}
+.habitat-table th{background:#0e5d75;color:#fff;text-align:left;padding:11px}
+.habitat-table td{padding:10px 11px;border-top:1px solid var(--line);vertical-align:top}
+.habitat-table tr:nth-child(even) td{background:#f8fbfd}
+.flash-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.flash{perspective:1000px;height:190px;cursor:pointer}
+.flash-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flash.flipped .flash-inner{transform:rotateY(180deg)}
+.flash-front,.flash-back{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;padding:20px;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border:1px solid var(--line);
+  box-shadow:0 8px 20px rgba(23,63,91,.08)
+}
+.flash-front{background:linear-gradient(145deg,#fff,#f3fbff)}
+.flash-back{background:linear-gradient(145deg,#0d5b78,#0c7d72);color:white;transform:rotateY(180deg)}
+.flash-front b{font-size:1.18rem}.flash small{margin-top:9px;color:var(--muted)}.flash-back small{color:#dcfffa}
+.quiz-shell{display:grid;grid-template-columns:270px 1fr;gap:16px}
+.quiz-menu{align-self:start;position:sticky;top:10px}
+.setbtn{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px;margin:0 0 8px;cursor:pointer}
+.setbtn strong{display:block;color:#173f5b}.setbtn span{font-size:.76rem;color:var(--muted)}
+.setbtn.active{background:#e9f7f5;border-color:#78cabb}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)}
+.qmeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.8rem;font-weight:750}
+.difficulty{padding:4px 9px;border-radius:999px;background:#edf5fb;color:#245778}
+.stimulus{background:#f5f9fc;border:1px solid #e1ebf2;border-left:5px solid var(--gold);border-radius:12px;padding:12px 14px;margin:13px 0;line-height:1.5;color:#3b5368}
+.qprompt{font-size:1.12rem;line-height:1.5;font-weight:850;margin:13px 0}
+.options{display:grid;gap:9px}
+.option{
+  width:100%;text-align:left;border:2px solid #dce7ef;background:#fff;border-radius:13px;padding:12px 14px;cursor:pointer;
+  color:#28485f;line-height:1.4
+}
+.option:hover{border-color:#81b9db;background:#f7fbfe}
+.option.selected{border-color:var(--purple);background:#f5f1ff}
+.option.correct{border-color:#5bbf70;background:#edf9f0;color:#205c2d}
+.option.wrong{border-color:#dd7280;background:#fff1f3;color:#8d2633}
+.feedback{display:none;margin-top:14px;border-radius:14px;padding:14px;line-height:1.5}
+.feedback.show{display:block}.feedback.good{background:#eaf9ee;border:1px solid #a5ddb0}.feedback.bad{background:#fff1f3;border:1px solid #efb9c0}
+.hint{display:none;margin-top:10px;background:#fff8e5;border:1px dashed #e3b74e;padding:11px;border-radius:12px;color:#6a5012}
+.hint.show{display:block}
+.quiz-actions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:15px}
+.scoreboard{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+.scorechip{background:#eef6fa;border-radius:10px;padding:7px 10px;font-size:.8rem;font-weight:850;color:#315a71}
+.result{text-align:center;padding:20px 8px}
+.bigscore{font-size:3.7rem;line-height:1;font-weight:950;color:#0d5d75;letter-spacing:-.05em}
+.stars{font-size:1.55rem;letter-spacing:.1em;color:#e0aa22}
+.mini-note{font-size:.8rem;color:var(--muted)}
+.callout{border-radius:17px;padding:15px;background:linear-gradient(135deg,#eefbf7,#f2f7ff);border:1px solid #d6ebe8}
+.missed-list{display:grid;gap:8px}
+.missed-item{border:1px solid #e5edf2;border-radius:12px;padding:11px;background:#fff}
+.footer{margin-top:26px;text-align:center;color:#6f8393;font-size:.77rem}
+@media(max-width:800px){
+  .hero-grid,.quiz-shell{grid-template-columns:1fr}.quiz-menu{position:static}
+  .span-4,.span-6,.span-8,.span-12{grid-column:span 12}
+}
+@media(max-width:560px){
+  .hero-copy{padding:22px}.hero-side{padding:18px}.card,.qcard{padding:16px}
+  .shell{padding-left:12px;padding-right:12px}.top{margin-left:-12px;margin-right:-12px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <div class="brandmark">H</div>
+      <div><h1>Georgia Habitats Mastery Lab</h1><p>Grade 3 Science • Two-Day District Assessment Prep</p></div>
+    </div>
+    <div class="topstats">
+      <span class="pill" id="topStars">Stars 0</span>
+      <span class="pill" id="topAccuracy">Accuracy 0%</span>
+      <span class="pill" id="topStreak">Best streak 0</span>
+    </div>
+  </div>
+</div>
+
+<main class="shell">
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <div class="kicker">Science Unit Two • Habitats</div>
+      <h2>Learn it. Apply it. Explain it.</h2>
+      <p>This page turns the habitat study guide into short lessons, memory checks, scenario questions, and harder assessment-style challenges. The goal is not to memorize a list. The goal is to recognize clues, choose evidence, and explain why an organism can or cannot thrive.</p>
+    </div>
+    <div class="hero-side">
+      <div class="goal-card"><strong>95th</strong><span>percentile mindset</span></div>
+      <div class="goal-card"><strong id="heroMastery">0%</strong><span>practice mastery</span></div>
+      <div class="goal-note">Practice score is not a percentile score. Use 90%+ mastery here as a strong readiness target, then keep correcting mistakes until the reasoning feels easy.</div>
+    </div>
+  </div>
+</section>
+
+<nav class="nav" aria-label="Study sections">
+  <button class="active" data-view="home">Mission</button>
+  <button data-view="learn">Learn</button>
+  <button data-view="flash">Flashcards</button>
+  <button data-view="quiz">Quiz Lab</button>
+  <button data-view="review">Mistake Review</button>
+</nav>
+
+<section id="home" class="view active">
+  <div class="grid">
+    <div class="card span-8">
+      <div class="section-title"><h2>Your 2-Day Mission</h2><p>Short focused rounds work better than one long cram session.</p></div>
+      <div class="grid">
+        <div class="card span-6 day">
+          <div class="num">1</div>
+          <h3>Day 1: Build the map in your head</h3>
+          <ul class="tasks">
+            <li>Read the five habitat lesson cards.</li>
+            <li>Learn the survival needs: food, water, air, protection, shelter.</li>
+            <li>Practice plant and animal adaptations.</li>
+            <li>Complete Quiz Set 1 and Set 2.</li>
+            <li>Redo every missed question before stopping.</li>
+          </ul>
+        </div>
+        <div class="card span-6 day">
+          <div class="num">2</div>
+          <h3>Day 2: Think like the test writer</h3>
+          <ul class="tasks">
+            <li>Flip through all flashcards once.</li>
+            <li>Complete the Stretch Challenge without notes.</li>
+            <li>Explain each answer aloud: “I know because…”</li>
+            <li>Repeat missed concepts until accuracy is 90%+.</li>
+            <li>Finish with the 10-question Final Sprint.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card span-4">
+      <h3>Readiness Dashboard</h3>
+      <div class="metric">
+        <div>
+          <b id="masteryLabel">Building mastery</b>
+          <p class="mini-note">Based on answered practice questions.</p>
+        </div>
+        <div class="ring" id="masteryRing"><b id="ringText">0%</b></div>
+      </div>
+      <div class="progress"><span id="masteryBar"></span></div>
+      <p id="masteryMessage">Start with Learn, then test yourself.</p>
+      <button class="btn" onclick="showView('learn')">Start learning</button>
+    </div>
+    <div class="card span-4">
+      <h3>The 5 survival needs</h3>
+      <p><b>Food • Water • Air • Protection • Shelter</b></p>
+      <p class="mini-note">When a habitat changes, ask: Which of these needs became harder to get?</p>
+    </div>
+    <div class="card span-4">
+      <h3>The test-writer trick</h3>
+      <p>Many answer choices sound possible. Pick the one that is <b>best supported by the habitat clue</b>.</p>
+      <p class="mini-note">Location + soil/water + plant feature + animal adaptation = strong evidence.</p>
+    </div>
+    <div class="card span-4">
+      <h3>Power sentence</h3>
+      <p><b>“This organism can thrive because its feature helps it get what it needs in that habitat.”</b></p>
+      <p class="mini-note">Use this sentence frame when explaining your reasoning aloud.</p>
+    </div>
+  </div>
+</section>
+
+<section id="learn" class="view">
+  <div class="section-title"><h2>Learn the Big Ideas</h2><p>Simplified from the study guide, with the clues most likely to matter in scenarios.</p></div>
+  <div class="lesson-grid" id="lessonGrid"></div>
+  <div class="card" style="margin-top:14px;overflow:auto">
+    <h3>Fast Habitat Comparison</h3>
+    <table class="habitat-table">
+      <thead><tr><th>Habitat</th><th>Strong clues</th><th>Plants</th><th>Animals</th></tr></thead>
+      <tbody>
+        <tr><td><b>Mountain</b></td><td>Rugged ridges, valleys, waterfalls, very wet, colder at higher elevation</td><td>Maple, laurel, pine</td><td>Black bear, deer, salamander, trout, woodpecker</td></tr>
+        <tr><td><b>Piedmont</b></td><td>Central Georgia, rolling hills, lakes, rivers, red/clay soil, warmer than mountains</td><td>Dogwood, live oak, pine</td><td>Deer, raccoon, rattlesnake, brown thrasher</td></tr>
+        <tr><td><b>Marsh & Swamp</b></td><td>Low land, often flooded, wet low-nutrient soil</td><td>Marsh grass, cypress, tupelo, pitcher plant</td><td>Alligator, heron, water moccasin, green tree frog</td></tr>
+        <tr><td><b>Coast</b></td><td>Sandy beaches, wetlands, barrier islands, salt spray</td><td>Longleaf pine, live oak + Spanish moss, magnolia, palm</td><td>Seagull, ghost crab, gopher tortoise</td></tr>
+        <tr><td><b>Atlantic Ocean</b></td><td>Open saltwater off Georgia's southeast coast</td><td>Seaweed, seagrass, algae</td><td>Shrimp, sea turtle, sea star, lobster, right whale</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="flash" class="view">
+  <div class="section-title"><h2>Flashcards</h2><p>Click a card to flip it. Say the answer before you flip.</p></div>
+  <div class="flash-wrap" id="flashWrap"></div>
+</section>
+
+<section id="quiz" class="view">
+  <div class="section-title"><h2>Quiz Lab</h2><p>Hints are available, but try first without them. Each question explains the reasoning after you check it.</p></div>
+  <div class="quiz-shell">
+    <aside class="card quiz-menu">
+      <h3>Choose a round</h3>
+      <button class="setbtn active" data-set="1"><strong>Set 1 • Foundations</strong><span>15 questions • core knowledge</span></button>
+      <button class="setbtn" data-set="2"><strong>Set 2 • Apply the Clues</strong><span>15 questions • scenarios</span></button>
+      <button class="setbtn" data-set="3"><strong>Set 3 • Stretch Challenge</strong><span>15 questions • harder reasoning</span></button>
+      <button class="setbtn" data-set="4"><strong>Final Sprint</strong><span>10 mixed questions • no repeats</span></button>
+      <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+      <div class="mini-note">Tip: aim for 90%+ on Sets 2 and 3. Then redo missed questions, not the easy ones.</div>
+    </aside>
+    <div id="quizArea"></div>
+  </div>
+</section>
+
+<section id="review" class="view">
+  <div class="section-title"><h2>Mistake Review</h2><p>Your missed concepts are saved on this device so you can target what needs work.</p></div>
+  <div class="card">
+    <div class="flex" style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+      <div><h3 style="margin-bottom:4px">Correction Queue</h3><p class="mini-note" id="missedSummary"></p></div>
+      <button class="btn red" onclick="resetProgress()">Reset progress</button>
+    </div>
+    <div class="missed-list" id="missedList"></div>
+  </div>
+</section>
+
+<div class="footer">Built as a single self-contained GitHub Pages file. Progress is stored only in this browser using localStorage.</div>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+const LESSONS = [
+ {tag:"Foundation",title:"What is a habitat?",text:"A habitat is the natural home where an organism lives. A good habitat must provide what the organism needs to survive.",rule:"Remember the five needs: food, water, air, protection, and shelter."},
+ {tag:"Georgia geography",title:"Five geographic regions",text:"Georgia has five geographic regions: Blue Ridge Mountains, Appalachian Plateau, Ridge and Valley, Piedmont, and Coastal Plains.",rule:"The Piedmont is central Georgia. Marsh, swamp, and coast habitats are associated with the Coastal Plain."},
+ {tag:"Habitat clues",title:"Mountain habitat",text:"Mountain habitats have rugged ridges, deep valleys, gorges, waterfalls, heavy rainfall, and cooler conditions at higher elevation. Maple, laurel, and pine are common.",rule:"Think: high + wet + rugged + forested."},
+ {tag:"Habitat clues",title:"Piedmont habitat",text:"The Piedmont is in central Georgia between the mountains and coastal plains. It has low rolling hills, forests, lakes, rivers, and thick clay soil.",rule:"Think: central Georgia + rolling hills + red/clay soil."},
+ {tag:"Habitat clues",title:"Marsh and swamp",text:"These are low-lying parts of the Coastal Plain that are often covered by water. Wet soil may have few nutrients. Pitcher plants and sundews can trap insects for nutrients.",rule:"Think: flooded lowland + wet, low-nutrient soil."},
+ {tag:"Habitat clues",title:"Coastal habitat",text:"The coast has sandy beaches, wetlands, and barrier islands. Plants may have thick waxy leaves that help repel salty ocean spray.",rule:"Think: sand + barrier islands + salt spray."},
+ {tag:"Habitat clues",title:"Atlantic Ocean",text:"The Atlantic Ocean habitat is saltwater off Georgia's southeastern coast. Seaweed, seagrass, algae, shrimp, sea turtles, sea stars, lobsters, sea trout, and right whales live there.",rule:"Think: open marine saltwater."},
+ {tag:"Adaptations",title:"Adaptation = survival helper",text:"An adaptation is a physical characteristic or behavior that helps an organism survive in its environment. Webbed feet, sharp claws, teeth, camouflage, and mimicry are examples.",rule:"Ask: What job does the feature do for survival?"},
+ {tag:"Behaviors",title:"Hibernation and migration",text:"Hibernation is deep sleep during the coldest months when food is scarce. Migration is moving to another geographic area, often warmer, when conditions change.",rule:"Hibernation = sleep. Migration = move."},
+ {tag:"Protection",title:"Camouflage and mimicry",text:"Camouflage helps an organism blend into its surroundings. Mimicry helps a harmless organism protect itself by copying a characteristic of another organism.",rule:"Camouflage = blend in. Mimicry = copy another."},
+ {tag:"Plant survival",title:"Plant features match habitats",text:"Needle-like leaves can help retain water during freezing winters. Thick waxy leaves can repel salty spray. Carnivorous plants can trap insects when soil has few nutrients.",rule:"Match the plant feature to the habitat problem it solves."},
+ {tag:"Change",title:"When habitats change",text:"Deforestation, pollution, and land clearing can remove food and shelter or damage the environment. Flooding can also harm organisms that are not adapted to flooded conditions.",rule:"After a change, ask which survival need was lost or disrupted."}
+];
+
+const FLASH = [
+ ["Habitat","The natural home where an organism lives."],
+ ["Organism","Any living thing, such as a plant, animal, or bacteria."],
+ ["Thrive","To grow and develop very well in an environment."],
+ ["Adaptation","A characteristic or behavior that helps an organism survive."],
+ ["Hibernation","Deep sleep during cold months when food is scarce."],
+ ["Migration","Moving to another region when conditions or food availability change."],
+ ["Mimicry","Protection by copying a characteristic of another organism."],
+ ["Camouflage","Blending in with the surroundings to avoid danger or approach prey."],
+ ["Elevation","The height of land above sea level."],
+ ["Deforestation","Clearing a wide area of trees."],
+ ["Piedmont clue","Central Georgia, rolling hills, lakes/rivers, clay soil."],
+ ["Mountain clue","Rugged ridges, valleys, waterfalls, heavy rainfall."],
+ ["Marsh/swamp clue","Low land, frequent water, wet low-nutrient soil."],
+ ["Coast clue","Sandy beaches, wetlands, barrier islands, salty spray."],
+ ["Atlantic Ocean clue","Open saltwater habitat off Georgia's southeast coast."],
+ ["Five survival needs","Food, water, air, protection, shelter."]
+];
+
+let id=0; const Q=[];
+const add=(set,topic,difficulty,prompt,options,correct,explanation,hint,stimulus="",multi=false)=>Q.push({id:++id,set,topic,difficulty,prompt,options,correct,explanation,hint,stimulus,multi});
+
+add(1,"Habitat basics","Warm-up","What is a habitat?",["A place where only animals live","The natural home where an organism lives","Any place with water","A type of geographic region"],1,"A habitat is the natural home of an organism. It provides the conditions and resources needed to live.","Think: home, not just location.");
+add(1,"Survival needs","Warm-up","Which list contains the five survival needs from the study guide?",["Food, water, air, protection, shelter","Food, sunlight, toys, air, shelter","Water, soil, migration, air, food","Food, water, warmth, camouflage, shelter"],0,"The guide names food, water, air, protection, and shelter.","Say the five needs aloud.");
+add(1,"Georgia regions","Warm-up","Which is one of Georgia's five geographic regions?",["Great Plains","Piedmont","Sonoran Desert","Everglades"],1,"Piedmont is one of Georgia's five geographic regions.","Look for a name from Georgia's region list.");
+add(1,"Piedmont","Warm-up","Where is the Piedmont habitat located?",["In central Georgia","Only on barrier islands","Under the Atlantic Ocean","Only in the Blue Ridge Mountains"],0,"The Piedmont is in central Georgia, between the mountains and coastal plains.","Picture the middle of Georgia.");
+add(1,"Mountain","Warm-up","Which feature best matches the mountain habitat?",["Sandy beaches","Rugged ridges and waterfalls","Open saltwater","Low flooded land"],1,"Mountain habitat clues include rugged ridges, valleys, gorges, waterfalls, and heavy rainfall.","Which clue sounds high and rugged?");
+add(1,"Marsh & swamp","Warm-up","Which habitat is low land that is frequently covered by water?",["Piedmont","Mountain","Marsh and swamp","Atlantic Ocean"],2,"Marshes and swamps are low-lying areas that are frequently covered or flooded by water.","Low land + frequent water.");
+add(1,"Coast","Warm-up","Which feature best matches Georgia's coastal habitat?",["Barrier islands and sandy beaches","Rugged ridges","Thick clay soil only","Deep mountain valleys"],0,"The coast includes sandy beaches, wetlands, and barrier islands.","Think about where land meets the Atlantic.");
+add(1,"Atlantic Ocean","Warm-up","Which organism is listed for the Atlantic Ocean habitat?",["Black bear","Right whale","Rattlesnake","Gopher tortoise"],1,"Right whales are listed among animals of the Atlantic Ocean habitat.","Which animal needs open saltwater?");
+add(1,"Adaptations","Warm-up","What is an adaptation?",["A seasonal storm","A feature or behavior that helps survival","A type of soil","A geographic region"],1,"An adaptation is a physical characteristic or behavior that helps an organism survive.","Adapt = helps survival.");
+add(1,"Hibernation","Warm-up","Hibernation is best described as…",["Flying south every year","Deep sleep during cold months when food is scarce","Changing color to blend in","Building a nest"],1,"Hibernation is a deep sleep during the coldest months when food supplies drop.","Sleep or move?");
+add(1,"Migration","Warm-up","Migration means…",["Moving to another geographic region when conditions change","Sleeping through winter","Copying another organism","Growing waxy leaves"],0,"Migration is movement from one geographic region to another, often when cold weather makes food scarce.","Migration = move.");
+add(1,"Mimicry","Warm-up","A harmless animal copies a dangerous animal's appearance. What adaptation is this?",["Hibernation","Mimicry","Migration","Elevation"],1,"Mimicry protects an organism by copying a characteristic of another organism.","Copy another organism.");
+add(1,"Camouflage","Warm-up","What does camouflage help an animal do?",["Blend into its surroundings","Move to a warmer region","Sleep all winter","Grow larger leaves"],0,"Camouflage helps an animal hide or approach prey by blending with its surroundings.","Blend in.");
+add(1,"Human impacts","Warm-up","What is deforestation?",["Planting a forest","Clearing a wide area of trees","Flooding a marsh","Moving animals to a zoo"],1,"Deforestation is the clearing of wide areas of trees.","De-forest means removing forest.");
+add(1,"Plant adaptation","Warm-up","Why can pitcher plants benefit from trapping insects?",["The insects make the soil sandy","Wet soil may have few nutrients","The insects keep leaves dry","They need insects to migrate"],1,"Pitcher plants live in wet, low-nutrient conditions. Trapping insects helps them obtain nutrients.","What problem does low-nutrient soil create?");
+
+add(2,"Piedmont","Apply","A habitat has hot summers, cool winters, lots of red clay soil, dogwood trees, deer, and snakes. Which question would BEST confirm that it is Piedmont?",["Is it located in central Georgia?","Is it somewhere in Georgia?","Does it have any plants?","Does it get rain?"],0,"Central Georgia is a strong distinguishing clue for Piedmont. The other questions are too broad.","Choose the question that separates Piedmont from other habitats.","Several clues already point to Piedmont.");
+add(2,"Plant habitat match","Apply","Mountain laurel grows on rocky forested slopes. Which question is MOST useful before deciding if it could thrive in a marsh?",["Does the marsh have rocky soil like the plant needs?","Are there animals in the marsh?","Is the marsh in Georgia?","Does the marsh have air?"],0,"A survival decision should compare the plant's needs with the new habitat. Rocky versus soft wet soil is directly relevant.","Ask about the feature the plant depends on.");
+add(2,"Plant adaptation","Apply","Which TWO questions best show understanding of how plant features help survival?",["Does it have larger leaves to capture more light in shade?","Is the plant green?","Does it have a feature that traps insects in nutrient-poor soil?","Is the plant taller than one foot?"],[0,2],"Both questions connect a plant feature to a specific survival problem: getting light or getting nutrients.","Pick answers that connect feature → job → habitat problem.","",true);
+add(2,"Animal adaptation","Apply","How do an alligator's webbed feet help it survive?",["They help it climb trees","They help it swim efficiently to move and catch food","They help it hibernate","They help it chew food"],1,"Webbed feet help move through water, supporting swimming and hunting.","Think about the alligator's watery habitat.");
+add(2,"Camouflage","Apply","An alligator's body color blends with murky water. What survival advantage can this provide?",["It can be harder for prey to notice it","It can breathe underwater forever","It can grow plants on its back","It no longer needs food"],0,"Blending in can hide the alligator from prey and danger. That is camouflage.","Blend in = less visible.");
+add(2,"Habitat fit","Apply","Pitcher plants are moved from a wet marsh habitat to a much drier Piedmont garden and begin to die. Which explanation is strongest?",["The new habitat may not provide the wet conditions they are adapted to","Piedmont has no sunlight","Piedmont has no air","Pitcher plants can only live beside whales"],0,"The best explanation links the plant's adaptation to a major habitat difference: water conditions.","Compare the original habitat with the new one.");
+add(2,"Habitat fit","Apply","A palm tree adapted to a warm coastal climate is planted high in the North Georgia mountains. What is the best prediction?",["It may not thrive because the mountain climate is colder","It must thrive because all plants need rain","It becomes a pine tree","It will live only if deer are nearby"],0,"Rain alone is not enough. A plant must match multiple habitat conditions, including temperature.","One survival need does not guarantee a good habitat match.");
+add(2,"Habitat change","Apply","Which organism would most likely be harmed first if floodwater covered its nesting area?",["A bird that nests on the ground","A fish already living in freshwater","A floating water plant","A swimming alligator"],0,"Ground nests can be covered or destroyed by floodwater, removing shelter and protection.","Which one depends on dry ground?");
+add(2,"Habitat change","Apply","Milkweed is removed to build a neighborhood. Monarch butterflies use milkweed for food and shelter. What is the strongest prediction?",["Their survival route may change as they search for needed resources","They will never migrate again","They will instantly adapt to eating rocks","They will all become hibernating mammals"],0,"Removing food and shelter can force organisms to change where they travel or live in order to survive.","Which answer follows from losing food and shelter?");
+add(2,"Coastal adaptation","Apply","Why are thick, waxy leaves useful for some coastal plants?",["They help repel salty ocean spray","They let plants swim","They make roots disappear","They cause migration"],0,"The study guide links thick, waxy leaves with repelling salty ocean water spray.","What problem is unique near the ocean?");
+add(2,"Mountain adaptation","Apply","Why can needle-like leaves be useful on some mountain trees?",["They can help retain water during freezing winters","They catch fish","They create clay soil","They make the tree migrate"],0,"The study guide notes that needle-like leaves can help retain water during freezing winters.","Match the feature to the mountain condition.");
+add(2,"Marsh & swamp","Apply","A plant lives in wet soil with few nutrients and has a structure that traps insects. Which habitat is the best match?",["Mountain","Piedmont","Marsh or swamp","Open ocean"],2,"Carnivorous plants such as pitcher plants and sundews are associated with wet, low-nutrient marsh and swamp soils.","Wet + low nutrients + insect trapping.");
+add(2,"Evidence","Apply","A student says, 'This habitat must be Piedmont because it has animals.' What is wrong with the reasoning?",["All habitats can contain animals, so the evidence is not specific enough","Piedmont has no animals","Only mountains have animals","Animals cannot be habitat clues"],0,"Good evidence should distinguish one habitat from another. Simply having animals is too broad.","Ask whether the clue is unique enough.");
+add(2,"Human impacts","Apply","A forest is cleared for new buildings. Which habitat need is most directly reduced for many animals?",["Shelter and protection","Air everywhere on Earth","The existence of seasons","Ocean salt"],0,"Land clearing can remove trees and vegetation that provide shelter and protection, and it can also reduce food.","What did the trees provide?");
+add(2,"Pollution","Apply","Pollution enters a healthy wetland. Which statement is most scientifically reasonable?",["The habitat may become less able to meet organisms' survival needs","Every organism will immediately migrate","Pollution always improves water quality","Only plants can be affected"],0,"Pollution can damage ecosystem conditions and reduce the habitat's ability to support organisms.","Look for the cautious evidence-based statement.");
+
+add(3,"Evidence","Stretch","A scientist finds rolling hills, a river, thick red clay soil, dogwood trees, and rattlesnakes. Which evidence combination is strongest?",["Red clay + central rolling terrain + dogwood","Rattlesnakes alone","A river alone","The presence of air"],0,"Several matching clues together provide stronger evidence than one broad clue.","Combine multiple specific clues.","Which clues point together to one habitat?");
+add(3,"Reasoning","Stretch","Why can the same animal sometimes live in more than one Georgia habitat?",["Different habitats may provide similar survival needs and conditions","Every habitat is exactly the same","Animals never depend on habitat conditions","Geographic regions do not matter"],0,"Some habitats share resources and conditions. An organism may survive in more than one place if its needs are met.","Think needs, not labels.");
+add(3,"Plant features","Stretch","A coastal plant with waxy leaves is moved inland where salt spray is absent. What is the best statement about the waxy feature?",["It may still exist, but its salt-repelling advantage is less important there","The leaves must disappear immediately","The plant becomes an animal","Waxy leaves prove the plant is in the ocean"],0,"An adaptation is useful because of a condition. If the condition changes, the feature may provide less advantage, but it does not vanish instantly.","Feature and environment interact.");
+add(3,"Habitat fit","Stretch","Two habitats both have plenty of water. Why might a mountain plant still fail in a swamp?",["Other conditions such as soil type, temperature, and root environment may not match","Water is the only condition plants need","Swamps have no air","Mountain plants cannot live in Georgia"],0,"Survival depends on several interacting conditions, not just one resource.","Do not stop at a single matching clue.");
+add(3,"Adaptation","Stretch","Which explanation best uses evidence about an adaptation?",["Webbed feet increase surface area for pushing against water, helping an alligator swim","Webbed feet are interesting","Alligators live in Georgia, so their feet are useful","All animals need feet"],0,"Strong explanations connect the physical feature directly to a survival function.","Feature → function → survival.");
+add(3,"Mimicry vs camouflage","Stretch","A harmless snake has markings that resemble a dangerous snake. This is different from camouflage because…",["It copies another organism rather than simply blending into the background","It always involves sleeping","It happens only in water","It is a plant feature"],0,"Mimicry copies another organism. Camouflage blends with the environment.","Copy organism vs blend with surroundings.");
+add(3,"Migration","Stretch","Cold weather reduces an animal's food supply. Which observation is strongest evidence of migration?",["The animal travels to a warmer region","The animal sleeps in a den","The animal changes fur color","The animal grows claws"],0,"Migration is movement to another geographic region in response to changing conditions.","Movement is the key.");
+add(3,"Hibernation","Stretch","Which evidence best supports hibernation rather than migration?",["The animal remains in the same area but enters a deep winter sleep","The animal flies hundreds of miles south","The animal blends with leaves","The animal hunts at night"],0,"Hibernation involves deep sleep, not geographic movement.","Same area + deep sleep.");
+add(3,"Human impact","Stretch","A development project removes trees beside a stream. Which chain of effects is most logical?",["Less shelter and food → animals relocate or decline → habitat community changes","More trees → more shelter → no change","Less shelter → every animal hibernates","No trees → ocean water appears"],0,"Removing vegetation can reduce resources, which can affect where organisms can survive.","Choose the cause-and-effect chain that follows habitat needs.");
+add(3,"Flooding","Stretch","Why might a freshwater fish be less harmed by a short flood than a ground-nesting bird?",["The fish is already adapted to living in water, while a ground nest can be submerged","Fish do not need oxygen","Birds cannot move","Floodwater never affects fish"],0,"The comparison depends on adaptation to water and the vulnerability of the nesting site.","Who is already adapted to an aquatic environment?");
+add(3,"Atlantic Ocean","Stretch","Which evidence would most strongly rule OUT the Atlantic Ocean habitat?",["Thick red clay soil with rolling hills","Saltwater","Sea turtles","Seaweed"],0,"Red clay and rolling hills are Piedmont clues, not open marine saltwater clues.","Look for a land clue that contradicts ocean.");
+add(3,"Coast vs ocean","Stretch","A student confuses the coast with the Atlantic Ocean. Which distinction is best?",["The coast includes land features like sandy beaches and barrier islands; the ocean is open saltwater","They are exactly the same habitat","The coast has no water","The ocean has clay hills"],0,"The coast is where land meets the ocean and includes beaches and islands. The Atlantic Ocean is the marine saltwater environment offshore.","Land-edge versus open water.");
+add(3,"Question design","Stretch","Which question is most useful for distinguishing a marsh from Piedmont?",["Is the land frequently covered by water?","Does the habitat contain living things?","Is it in Georgia?","Does it have air?"],0,"Frequent flooding directly distinguishes marsh/swamp conditions from typical Piedmont terrain.","Ask for a specific habitat feature.");
+add(3,"Plant reasoning","Stretch","A plant traps insects. What can you infer most carefully?",["It may live where soil nutrients are limited","It definitely lives in the ocean","It cannot use sunlight","It must be a tree"],0,"From the guide, insect-trapping is an adaptation that can help plants in nutrient-poor wet soils. 'May' is appropriately cautious.","Choose the evidence-based inference, not an absolute claim.");
+add(3,"Systems thinking","Stretch","Which statement best explains why habitat change can affect migration?",["If food or shelter disappears along a route, organisms may need to change where they travel","Migration is unrelated to resources","Only soil color controls migration","All habitat changes cause hibernation"],0,"Migration is tied to changing environmental conditions and access to resources.","Connect route decisions to survival needs.");
+
+add(4,"Final mix","Final","Which clue most strongly points to Piedmont?",["Central Georgia and red clay soil","Barrier islands","Open saltwater","Deep mountain gorges"],0,"Central location and clay soil are strong Piedmont clues.","Find the paired clues.");
+add(4,"Final mix","Final","Which TWO are behavioral adaptations?",["Migration","Hibernation","Waxy leaves","Webbed feet"],[0,1],"Migration and hibernation are behaviors. Waxy leaves and webbed feet are physical features.","Behavior = something the organism does.","",true);
+add(4,"Final mix","Final","A plant with thick waxy leaves is especially well matched to which challenge?",["Salt spray near the coast","Deep winter sleep","Catching mammals","Living in red clay"],0,"Waxy leaves can help repel salty ocean spray.","Think coastline.");
+add(4,"Final mix","Final","What is the best evidence that a habitat is marsh or swamp?",["Low land frequently covered by water","A single deer is present","It is somewhere in Georgia","It has sunlight"],0,"Frequent water on low land is a defining physical clue.","Choose the most specific clue.");
+add(4,"Final mix","Final","Why is 'it has animals' weak evidence for identifying a habitat?",["Many habitats have animals","Animals only live in Piedmont","Habitats do not contain animals","It proves the habitat is ocean"],0,"A good identifying clue should distinguish among habitats.","Ask: does this clue separate one option?");
+add(4,"Final mix","Final","Which situation is mimicry?",["A harmless animal resembles a harmful one","A deer blends into brown leaves","A bear sleeps through winter","A bird flies south"],0,"Mimicry is copying another organism's characteristic.","Copy another organism.");
+add(4,"Final mix","Final","Which statement best explains why a palm tree may not thrive in high mountains?",["The temperature conditions may not match its warm-climate adaptation","Mountains have no water","Palm trees need clay only","Rain always harms palms"],0,"Temperature is a key habitat condition. A single resource like rainfall cannot guarantee a match.","Compare climate needs.");
+add(4,"Final mix","Final","If trees are cleared from an animal's habitat, which need may be lost immediately?",["Shelter","The existence of air on Earth","Migration as a definition","Ocean salt"],0,"Trees can directly provide shelter and protection.","What did the trees physically provide?");
+add(4,"Final mix","Final","Which explanation is strongest?",["An alligator's webbed feet help it swim, which supports movement and catching food in water","Alligators have feet because they are animals","Webbed feet look unusual","Alligators live in Georgia"],0,"Strong science explanations connect evidence to function and survival.","Feature → function → survival.");
+add(4,"Final mix","Final","A habitat provides food and water but no safe shelter. Can it fully meet the organism's listed survival needs?",["No, because shelter and protection are also essential needs","Yes, food and water are the only needs","Yes, if the organism migrates once","No, because all habitats need red clay"],0,"The guide lists five essential needs, so missing shelter/protection can make the habitat unsuitable.","Remember all five needs.");
+
+const KEY="habitatMastery_v1";
+let state=load();
+let currentSet=1, index=0, selected=[], checked=false;
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{attempts:0,correct:0,stars:0,bestStreak:0,streak:0,missed:{},completed:{}}}catch(e){return{attempts:0,correct:0,stars:0,bestStreak:0,streak:0,missed:{},completed:{}}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){} updateDashboard()}
+function pct(){return state.attempts?Math.round(100*state.correct/state.attempts):0}
+function updateDashboard(){
+ const p=pct(); document.getElementById("topStars").textContent="Stars "+state.stars;
+ document.getElementById("topAccuracy").textContent="Accuracy "+p+"%";
+ document.getElementById("topStreak").textContent="Best streak "+state.bestStreak;
+ document.getElementById("heroMastery").textContent=p+"%"; document.getElementById("ringText").textContent=p+"%";
+ document.getElementById("masteryRing").style.setProperty("--p",p); document.getElementById("masteryBar").style.width=p+"%";
+ let label="Building mastery",msg="Start with Learn, then test yourself.";
+ if(state.attempts>=10 && p>=90){label="Assessment ready";msg="Excellent. Keep your reasoning sharp by reviewing any missed questions."}
+ else if(state.attempts>=10 && p>=80){label="Strong progress";msg="You are close. Focus on the missed concepts and scenario questions."}
+ else if(state.attempts>=5){label="Growing stronger";msg="Keep going. Correcting mistakes is how mastery grows."}
+ document.getElementById("masteryLabel").textContent=label; document.getElementById("masteryMessage").textContent=msg;
+ renderReview();
+}
+function showView(v){
+ document.querySelectorAll(".view").forEach(x=>x.classList.remove("active")); document.getElementById(v).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===v));
+ if(v==="quiz") renderQuiz(); if(v==="review") renderReview(); window.scrollTo({top:0,behavior:"smooth"});
+}
+window.showView=showView;
+
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+
+function renderLessons(){
+ const box=document.getElementById("lessonGrid");
+ box.innerHTML=LESSONS.map(x=>`<article class="lesson"><div class="tag">${x.tag}</div><h3>${x.title}</h3><p>${x.text}</p><div class="rule">${x.rule}</div></article>`).join("");
+}
+function renderFlash(){
+ document.getElementById("flashWrap").innerHTML=FLASH.map((x,i)=>`<div class="flash" tabindex="0" role="button" aria-label="Flashcard ${i+1}: ${x[0]}" onclick="this.classList.toggle('flipped')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.toggle('flipped')}"><div class="flash-inner"><div class="flash-front"><b>${x[0]}</b><small>Think first, then click to flip</small></div><div class="flash-back"><b>${x[1]}</b><small>Click to flip back</small></div></div></div>`).join("");
+}
+function setQuestions(){return Q.filter(q=>q.set===currentSet)}
+function setProgress(){
+ const qs=setQuestions(), done=state.completed[currentSet]||0;
+ return Math.min(done,qs.length);
+}
+function renderQuiz(){
+ const area=document.getElementById("quizArea"), qs=setQuestions();
+ if(index>=qs.length){renderResult();return}
+ const q=qs[index];
+ const answered=setProgress();
+ area.innerHTML=`<div class="scoreboard"><span class="scorechip">Question ${index+1} / ${qs.length}</span><span class="scorechip">Set accuracy ${getSetAccuracy()}%</span><span class="scorechip">Streak ${state.streak}</span></div>
+ <div class="qcard"><div class="qmeta"><span>${q.topic}</span><span class="difficulty">${q.difficulty}</span></div>
+ ${q.stimulus?`<div class="stimulus">${q.stimulus}</div>`:""}
+ <div class="qprompt">${q.prompt}</div>
+ <div class="options">${q.options.map((o,i)=>`<button class="option" data-i="${i}"><b>${String.fromCharCode(65+i)}.</b> ${o}</button>`).join("")}</div>
+ <div class="hint" id="hintBox"><b>Hint:</b> ${q.hint}</div>
+ <div class="feedback" id="feedback"></div>
+ <div class="quiz-actions"><div><button class="btn secondary" id="hintBtn">Hint</button> <button class="btn" id="checkBtn">Check answer</button></div><button class="btn gold" id="nextBtn" disabled>${index===qs.length-1?"Finish round":"Next"}</button></div></div>`;
+ selected=[];checked=false;
+ area.querySelectorAll(".option").forEach(b=>b.onclick=()=>selectOption(+b.dataset.i,q,b));
+ document.getElementById("hintBtn").onclick=()=>document.getElementById("hintBox").classList.add("show");
+ document.getElementById("checkBtn").onclick=()=>checkAnswer(q);
+ document.getElementById("nextBtn").onclick=()=>{index++;renderQuiz()};
+ document.querySelectorAll(".setbtn").forEach(b=>b.classList.toggle("active",+b.dataset.set===currentSet));
+}
+function selectOption(i,q,b){
+ if(checked)return;
+ if(q.multi){
+   if(selected.includes(i)){selected=selected.filter(x=>x!==i);b.classList.remove("selected")}
+   else{selected.push(i);b.classList.add("selected")}
+ }else{
+   selected=[i];document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");
+ }
+}
+function same(a,b){return a.length===b.length && [...a].sort().every((v,i)=>v===[...b].sort()[i])}
+function checkAnswer(q){
+ if(checked||selected.length===0)return;
+ checked=true; const correctArr=q.multi?q.correct:[q.correct]; const ok=same(selected,correctArr);
+ state.attempts++; state.completed[currentSet]=(state.completed[currentSet]||0)+1;
+ if(ok){state.correct++;state.stars+=q.difficulty==="Stretch"?3:2;state.streak++;state.bestStreak=Math.max(state.bestStreak,state.streak);delete state.missed[q.id]}
+ else{state.streak=0;state.missed[q.id]=(state.missed[q.id]||0)+1}
+ document.querySelectorAll(".option").forEach((b,i)=>{
+   b.disabled=true;
+   if(correctArr.includes(i))b.classList.add("correct");
+   else if(selected.includes(i))b.classList.add("wrong");
+ });
+ const f=document.getElementById("feedback");f.className="feedback show "+(ok?"good":"bad");
+ f.innerHTML=`<b>${ok?"Correct. Strong reasoning!":"Not yet. This is a useful correction."}</b><br>${q.explanation}`;
+ document.getElementById("checkBtn").disabled=true;document.getElementById("nextBtn").disabled=false;save();
+}
+function getSetAccuracy(){return pct()}
+function renderResult(){
+ const qs=setQuestions(), area=document.getElementById("quizArea"), overall=pct();
+ let msg=overall>=90?"Excellent mastery. Now explain the hardest answers aloud without looking.":overall>=80?"Strong work. Review your missed questions, then try the stretch set again.":"Good start. Your fastest improvement will come from correcting missed concepts before another full round.";
+ area.innerHTML=`<div class="qcard result"><div class="kicker">Round complete</div><div class="bigscore">${overall}%</div><div class="stars">${overall>=90?"★★★★★":overall>=80?"★★★★☆":overall>=70?"★★★☆☆":"★★☆☆☆"}</div><h3>${msg}</h3><p>Practice accuracy is a mastery signal, not a percentile score. Keep pushing until scenario questions feel predictable.</p><button class="btn green" onclick="restartSet()">Repeat this round</button> <button class="btn secondary" onclick="showView('review')">Review mistakes</button></div>`;
+}
+window.restartSet=function(){index=0;renderQuiz()};
+
+document.querySelectorAll(".setbtn").forEach(b=>b.onclick=()=>{currentSet=+b.dataset.set;index=0;renderQuiz()});
+
+function renderReview(){
+ const list=document.getElementById("missedList"); if(!list)return;
+ const ids=Object.keys(state.missed).map(Number); document.getElementById("missedSummary").textContent=ids.length?`${ids.length} question${ids.length===1?"":"s"} currently need another look.`:"No missed questions in the queue right now.";
+ if(!ids.length){list.innerHTML=`<div class="callout"><b>Nothing in the queue yet.</b><p>Complete a quiz round. Any missed question will appear here automatically.</p></div>`;return}
+ list.innerHTML=ids.map(i=>{const q=Q.find(x=>x.id===i);return `<div class="missed-item"><b>${q.topic}</b><div style="margin-top:4px">${q.prompt}</div><div class="mini-note" style="margin-top:5px">Key idea: ${q.explanation}</div></div>`}).join("");
+}
+window.resetProgress=function(){
+ if(confirm("Reset all quiz progress, stars, streaks, and missed questions on this device?")){localStorage.removeItem(KEY);state=load();index=0;updateDashboard();renderQuiz()}
+};
+
+renderLessons();renderFlash();updateDashboard();renderQuiz();
+})();
+</script>
+</body>
+</html>
